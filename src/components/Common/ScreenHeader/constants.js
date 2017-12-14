@@ -1,0 +1,5 @@
+export const MESSAGES_MSG = 'Messages'
+export const LOGOUT_MSG = 'Log Out of Schoolinks'
+export const ACCOUNT_SETTINGS_MSG = 'Account Settings'
+export const TERMS_AND_CONDITIONS_MSG = 'Terms And Conditions'
+export const NOTIFICATIONS_MSG = 'Notifications'

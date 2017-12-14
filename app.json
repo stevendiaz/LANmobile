@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "TexasLAN",
+    "icon": "./resources/images/app_icons/android/ic_launcher/web_hi_res_512.png",
+    "version": "0.0.1",
+    "slug": "schoolinks",
+    "sdkVersion": "21.0.0",
+    "orientation": "portrait",
+    "primaryColor": "#6B9925",
+    "ios": {
+      "bundleIdentifier": "org.texaslan.mobile",
+      "splash": {
+        "image": "./resources/images/app_icons/android/ic_launcher/web_hi_res_512.png"
+      }
+    },
+    "android": {
+      "package": "org.texaslan.mobile",
+      "splash": {
+        "ldpi": "./resources/images/app_icons/android/ic_launcher/res/mipmap-hdpi/ic_launcher.png",
+        "mdpi": "./resources/images/app_icons/android/ic_launcher/res/mipmap-mdpi/ic_launcher.png",
+        "hdpi": "./resources/images/app_icons/android/ic_launcher/res/mipmap-hdpi/ic_launcher.png",
+        "xhdpi": "./resources/images/app_icons/android/ic_launcher/res/mipmap-xhdpi/ic_launcher.png",
+        "xxhdpi": "./resources/images/app_icons/android/ic_launcher/res/mipmap-xxhdpi/ic_launcher.png",
+        "xxxhdpi": "./resources/images/app_icons/android/ic_launcher/res/mipmap-xxhdpi/ic_launcher.png"
+      }
+    }
+  },
+  "notification": {
+    "icon": "./resources/images/app_icons/android/res_1/drawable-xhdpi/ic_stat_sllogo_white.png",
+    "color": "#6B9925"
+  },
+  "loading": {
+    "icon": "./resources/images/app_icons/android/ic_launcher/web_hi_res_512.png",
+    "hideExponentText": true
+  }
+}
