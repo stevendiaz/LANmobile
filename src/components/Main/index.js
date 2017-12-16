@@ -4,6 +4,7 @@ import * as constants from '../constants'
 import Login from '../Login'
 import Loading from '../Common/Loading'
 import Profile from '../Profile'
+import Signup from '../Signup'
 
 /**
  * This is the main component used at app bootstrap. Takes responsability of

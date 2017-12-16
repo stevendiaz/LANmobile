@@ -12,6 +12,14 @@ export default styles = (window) => {
             height: window.height,
             backgroundColor: '#145991',
         },
+        signUpText: {
+          color: 'white',
+        },
+        signUpView: {
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 20,
+        },
         lanCrest: {
           flex: 1,
           height: undefined,

@@ -167,6 +167,27 @@ export default class Login extends Component {
         })
     }
 
+    renderSignUpText() {
+      const signUpText = "Don't have an account? Sign up here"
+      return (
+          <TouchableOpacity
+              style={s.signUpView}
+              onPress={() => console.log('pressed')}>
+                  <Text style={s.signUpText}>{signUpText}</Text>
+          </TouchableOpacity>
+      )
+    }
+
+    renderLoginButton() {
+      return (
+				<TouchableOpacity
+    				style={s.loginBtnContainer}
+    				onPress={() => this.login()}>
+    						<Text style={s.loginBtnText}> Login to TexasLAN </Text>
+				</TouchableOpacity>
+			)
+    }
+
     render() {
         let { loginStatus, error, showOnboardingModal } = this.state
         if (loginStatus === c.LOGIN_STATUS_PENDING) {
@@ -217,12 +238,9 @@ export default class Login extends Component {
 
                         {this.renderErrorMessage(error)}
                         {this.renderLoadingMessage()}
+                        {this.renderLoginButton()}
+                        {this.renderSignUpText()}
 
-                        <TouchableOpacity
-                            style={s.loginBtnContainer}
-                            onPress={() => this.login()}>
-                            <Text style={s.loginBtnText}> Login to TexasLAN </Text>
-                        </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>
             )

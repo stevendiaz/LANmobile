@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Image, Text, View, KeyboardAvoidingView, Dimensions } from 'react-native'
 
-const loginBackgroundImage = require('../../../../resources/images/login-bg.png')
-const logoImage = require('../../../../resources/images/logo-white.png')
+const logoImage = require('../../../../resources/images/lan-crest-white.png')
 const window = Dimensions.get('window')
 
 /**
@@ -13,8 +12,6 @@ export default class Loading extends Component {
     render() {
         return (
             <View style={s.container}>
-                <Image source={loginBackgroundImage} style={s.backgroundImage}
-                />
                 <View style={s.logoContainer}>
                     <Image style={s.logo} source={logoImage} />
                 </View>
@@ -26,7 +23,7 @@ export default class Loading extends Component {
 const s = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'transparent'
+        backgroundColor: '#145991',
     },
     logoContainer: {
         flexGrow: 1,
@@ -41,6 +38,7 @@ const s = StyleSheet.create({
         position: 'absolute',
         width: window.width,
         height: window.height,
-        resizeMode: 'cover'
+        resizeMode: 'cover',
+        backgroundColor: '#2196f3',
     }
 })
