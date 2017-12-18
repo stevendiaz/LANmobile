@@ -4,6 +4,7 @@ import * as c from '../constants'
 import * as cfg from '../../config'
 import { LOG } from '../../utils'
 import Profile from '../Profile'
+import Signup from '../Signup'
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import styles from './styles'
 
