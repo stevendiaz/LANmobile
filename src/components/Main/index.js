@@ -42,7 +42,6 @@ export default class Main extends Component {
      * to the Notifications Section -the default section to be displayed when app
      * is started- or to the login form.
      *
-     * @author Juan Carlos Cancela <juan@schoolinks.com>
      */
     componentDidMount() {
         try {

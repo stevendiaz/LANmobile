@@ -44,3 +44,4 @@ export const labels = {
 
 export const MAX_GRADUATION_DATE = "2026-05-15"
 export const MIN_GRADUATION_DATE = "2016-05-15"
+export const MIN_PASSWORD_LENGTH = 6

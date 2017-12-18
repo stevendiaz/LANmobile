@@ -88,5 +88,24 @@ export default styles = (window) => {
       fontWeight: 'bold',
       backgroundColor: 'rgba(0,0,0,0)'
     },
+    errorMessageText: {
+      marginTop: 15,
+      textAlign: 'center',
+      fontSize: 15,
+      color: 'white'
+    },
+    errorMessageContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 10,
+      marginLeft: 20
+    },
+    errorMessageImg: {
+      marginTop: 14,
+      marginRight: 10,
+      width: 20,
+      height: 20
+    },
   })
 }

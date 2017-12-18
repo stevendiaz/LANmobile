@@ -8,6 +8,7 @@ import * as constants from './constants'
 const window = Dimensions.get('window')
 const s = styles(window)
 const lanCrest = require('../../../resources/images/lan-crest-white.png')
+const alert = require('../../../resources/images/alert.png')
 
 export default class Signup extends Component {
   constructor(props) {
@@ -22,33 +23,50 @@ export default class Signup extends Component {
       username: '',
       graduationDate: undefined,
       concentration: '',
+      error: '',
+    }
+  }
+
+  passwordValidation() {
+    if (this.state.password != this.state.confirmPassword) {
+      this.setState({ error: 'Passwords must match'})
+      return
+    }
+    if (this.state.password.length < constants.MIN_PASSWORD_LENGTH) {
+      this.setState({ error: 'password length must be more than 6' })
+      return
+    }
+  }
+
+  fieldValidation() {
+    for(let key of Object.keys(this.state)) {
+      if (key != 'error' && this.state[key] == '' || this.state[key] == undefined) {
+        this.setState({ error: (key + ' field is blank')})
+        return
+      }
     }
   }
 
   signUp() {
-
+    this.passwordValidation()
+    this.fieldValidation()
+    console.log('end of signup validation')
   }
 
-  changeState(input, inputLabel) {
+  changeStateByKey(input, inputLabel) {
 		this.setState(previousState => {
 				previousState[inputLabel] = input
+        previousState.error = ''
         return previousState
     })
   }
 
-  renderLabel(inputLabel) {
-    if (this.state[inputLabel.key]) {
-      return (
-        <Text style={s.inputLabel}>{inputLabel.display}</Text>
-      )
-    }
-  }
-
-  renderTextInput(inputLabel, hideText=false, returnKeyType="next") {
+  renderTextInput(inputLabel, nextInput=null, hideText=false, returnKeyType="next") {
     return (
       <TextInput
+        ref={inputLabel.key}
         style={s.inputText}
-        onChangeText={(input) => this.changeState(input, inputLabel.key) }
+        onChangeText={(input) => this.changeStateByKey(input, inputLabel.key) }
         placeholder={inputLabel.display}
         keyboardType={inputLabel.key == "email" ?  "email-address" : "default" }
         underlineColorAndroid="transparent"
@@ -56,17 +74,19 @@ export default class Signup extends Component {
         autoCorrect={false}
         returnKeyType={returnKeyType}
         placeholderTextColor="rgba(255,255,255,1)"
-        onSubmitEditing={() => { inputLabel.key == "confirmPassword" ? dismissKeyboard() : console.log('ere') }}
-        secureTextEntry={hideText} />
+        onSubmitEditing={() => { inputLabel.key == "confirmPassword" ? dismissKeyboard() : nextInput.key == "graduationDate" ? this.refs[nextInput.key].onPressDate() : this.refs[nextInput.key].focus() }}
+        secureTextEntry={hideText}
+        selectionColor="white" />
     )
   }
 
 
-  renderDateInput(inputLabel) {
+  renderDateInput(inputLabel, nextInput=null) {
 		return (
-			<DatePicker
-				style={s.inputDate}
-				date={this.state[inputLabel.key]}
+      <DatePicker
+        ref={inputLabel.key}
+        style={s.inputDate}
+        date={this.state[inputLabel.key]}
 				mode="date"
 				placeholder={inputLabel.display}
 				format="YYYY-MM-DD"
@@ -75,7 +95,7 @@ export default class Signup extends Component {
 				confirmBtnText="Confirm"
 				cancelBtnText="Cancel"
 				customStyles={{ dateInput: s.dateBox, dateText: s.dateText, placeholderText: s.dateText }}
-				onDateChange={(date) => {this.changeState(date, inputLabel.key)}}
+				onDateChange={(date) => {this.changeStateByKey(date, inputLabel.key)}}
 			/>
 		)
 	}
@@ -88,16 +108,20 @@ export default class Signup extends Component {
     )
   }
 
-  renderDropdown(inputLabel) {
+  renderDropdown(inputLabel, nextInput=null) {
     return (
       <ModalDropdown
+        ref={inputLabel.key}
         options={inputLabel.dropdownOptions}
         defaultValue={inputLabel.display}
         style={s.dropdownInput}
         textStyle={s.dropdownText}
         dropdownStyle={s.dropdownStyle}
         dropdownTextStyle={s.dropdownSelectionStyle}
-        onSelect={ (index, value) => { this.changeState(value, inputLabel.key) }} />
+        onSelect={ (index, value) => {
+          this.changeStateByKey(value, inputLabel.key)
+          this.refs[nextInput.key].focus()
+        }} />
     )
   }
 
@@ -105,39 +129,49 @@ export default class Signup extends Component {
     return (
       <TouchableOpacity
         style={s.signupBtnContainer}
-        onPress={ () => console.log("signup")}>
+        onPress={ () => this.signUp()}>
         <Text style={s.signupBtnText}> Sign up </Text>
       </TouchableOpacity>
     )
+  }
+
+  renderErrorMessage() {
+    if (this.state.error != '') {
+      return (
+        <View style={s.errorMessageContainer}>
+          <Image source={alert} style={s.errorMessageImg} />
+          <Text style={s.errorMessageText}>{this.state.error}</Text>
+        </View>
+      )
+    }
+    else {
+      return (
+        <Text/>
+      )
+    }
   }
 
   renderSignupForm() {
     return (
       <View style={s.container}>
         { this.renderLogo() }
-        { this.renderLabel(constants.labels.fullname) }
-        { this.renderTextInput(constants.labels.fullname) }
+        { this.renderTextInput(constants.labels.fullname, nextInput=constants.labels.nickname) }
 
-        { this.renderLabel(constants.labels.nickname) }
-        { this.renderTextInput(constants.labels.nickname) }
+        { this.renderTextInput(constants.labels.nickname, nextInput=constants.labels.email) }
 
-        { this.renderLabel(constants.labels.email) }
-        { this.renderTextInput(constants.labels.email) }
+        { this.renderTextInput(constants.labels.email, nextInput=constants.labels.username) }
 
-        { this.renderLabel(constants.labels.username) }
-        { this.renderTextInput(constants.labels.username) }
+        { this.renderTextInput(constants.labels.username, nextInput=constants.labels.graduationDate) }
 
-        { this.renderLabel(constants.labels.graduationDate) }
-        { this.renderDateInput(constants.labels.graduationDate) }
+        { this.renderDateInput(constants.labels.graduationDate, nextInput=constants.labels.concentration) }
 
-        { this.renderLabel(constants.labels.concentration) }
-        { this.renderDropdown(constants.labels.concentration) }
+        { this.renderDropdown(constants.labels.concentration, nextInput=constants.labels.password) }
 
-        { this.renderLabel(constants.labels.password) }
-        { this.renderTextInput(constants.labels.password, hideText=true) }
+        { this.renderTextInput(constants.labels.password, nextInput=constants.labels.confirmPassword, hideText=true) }
 
-        { this.renderLabel(constants.labels.confirmPassword) }
-        { this.renderTextInput(constants.labels.confirmPassword, hideText=true, returnKeyType="done") }
+        { this.renderTextInput(constants.labels.confirmPassword, nextInput=null, hideText=true, returnKeyType="done") }
+
+        { this.renderErrorMessage() }
 
         { this.renderSignupButton() }
       </View>
