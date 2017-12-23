@@ -18,9 +18,8 @@ export default class Signup extends Component {
       email: '',
       password: '',
       confirmPassword: '',
-      fullname: '',
-      nickname: '',
-      username: '',
+      firstname: '',
+      lastname: '',
       graduationDate: undefined,
       concentration: '',
       error: '',
@@ -40,46 +39,61 @@ export default class Signup extends Component {
 
   fieldValidation() {
     for(let key of Object.keys(this.state)) {
-      if (key != 'error' && this.state[key] == '' || this.state[key] == undefined) {
+      if (key != 'error' && key != 'loading' && this.state[key] == '' || this.state[key] == undefined) {
         this.setState({ error: (key + ' field is blank')})
         return
       }
     }
   }
 
+  getSignUpJSON() {
+    result = Object.assign({}, this.state)
+    result.full_name = result.firstname + " " + result.lastname
+    result.username = result.email
+    result.graduation_date = result.graduationDate
+    result.confirm_password = result.confirmPassword
+    result.concentration = constants.labels.concentration.dropdownOptions[result.concentration]
+    return JSON.stringify(result)
+  }
+
   signUp() {
     this.passwordValidation()
     this.fieldValidation()
-    console.log('end of signup validation')
+    let signUpUrl = 'http://localhost:8000/api/v1/jwt/register/'
+    console.log("register json:")
+    console.log(this.getSignUpJSON())
+    fetch(signUpUrl, {
+      method: 'POST',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'Content-Type': 'application/json',
+      },
+      body: this.getSignUpJSON()
+    })
+      .then((authResponse) => authResponse.json())
+      .then((authResponse) => {
+        console.log(authResponse)
+        if (authResponse.error) {
+          this.setState({ error: authResponse.error })
+        }
+        else {
+          console.log("200 OK Redirect to confirmation email view")
+        }
+      })
+      .catch((error) => {
+        this.setState({ error, loading: false })
+      })
   }
 
   changeStateByKey(input, inputLabel) {
-		this.setState(previousState => {
-				previousState[inputLabel] = input
-        previousState.error = ''
-        return previousState
+    this.setState(previousState => {
+      previousState[inputLabel] = input
+      previousState.error = ''
+      return previousState
     })
   }
-
-  renderTextInput(inputLabel, nextInput=null, hideText=false, returnKeyType="next") {
-    return (
-      <TextInput
-        ref={inputLabel.key}
-        style={s.inputText}
-        onChangeText={(input) => this.changeStateByKey(input, inputLabel.key) }
-        placeholder={inputLabel.display}
-        keyboardType={inputLabel.key == "email" ?  "email-address" : "default" }
-        underlineColorAndroid="transparent"
-        autoCapitalize="none"
-        autoCorrect={false}
-        returnKeyType={returnKeyType}
-        placeholderTextColor="rgba(255,255,255,1)"
-        onSubmitEditing={() => { inputLabel.key == "confirmPassword" ? dismissKeyboard() : nextInput.key == "graduationDate" ? this.refs[nextInput.key].onPressDate() : this.refs[nextInput.key].focus() }}
-        secureTextEntry={hideText}
-        selectionColor="white" />
-    )
-  }
-
 
   renderDateInput(inputLabel, nextInput=null) {
 		return (
@@ -112,7 +126,7 @@ export default class Signup extends Component {
     return (
       <ModalDropdown
         ref={inputLabel.key}
-        options={inputLabel.dropdownOptions}
+        options={Object.keys(inputLabel.dropdownOptions)}
         defaultValue={inputLabel.display}
         style={s.dropdownInput}
         textStyle={s.dropdownText}
@@ -151,25 +165,49 @@ export default class Signup extends Component {
     }
   }
 
+  renderNameInputs() {
+    return (
+      <View style={{flexDirection: 'row'}}>
+        { this.renderTextInput(constants.labels.firstname, s.inputTextFirst, nextInput=constants.labels.lastname) }
+        { this.renderTextInput(constants.labels.lastname, s.inputTextLast, nextInput=constants.labels.email) }
+      </View>
+    )
+  }
+
+  renderTextInput(inputLabel, style, nextInput=null, hideText=false, returnKeyType="next") {
+    return (
+      <TextInput
+        ref={inputLabel.key}
+        style={style}
+        onChangeText={(input) => this.changeStateByKey(input, inputLabel.key) }
+        placeholder={inputLabel.display}
+        keyboardType={inputLabel.key == "email" ?  "email-address" : "default" }
+        underlineColorAndroid="transparent"
+        autoCapitalize="none"
+        autoCorrect={false}
+        returnKeyType={returnKeyType}
+        placeholderTextColor="rgba(255,255,255,1)"
+        onSubmitEditing={() => { inputLabel.key == "confirmPassword" ? dismissKeyboard() : nextInput.key == "graduationDate" ? this.refs[nextInput.key].onPressDate() : this.refs[nextInput.key].focus() }}
+        secureTextEntry={hideText}
+        selectionColor="white" />
+    )
+  }
+
   renderSignupForm() {
     return (
       <View style={s.container}>
         { this.renderLogo() }
-        { this.renderTextInput(constants.labels.fullname, nextInput=constants.labels.nickname) }
 
-        { this.renderTextInput(constants.labels.nickname, nextInput=constants.labels.email) }
+        { this.renderNameInputs() }
 
-        { this.renderTextInput(constants.labels.email, nextInput=constants.labels.username) }
-
-        { this.renderTextInput(constants.labels.username, nextInput=constants.labels.graduationDate) }
+        { this.renderTextInput(constants.labels.email, s.inputText, nextInput=constants.labels.graduationDate) }
 
         { this.renderDateInput(constants.labels.graduationDate, nextInput=constants.labels.concentration) }
-
         { this.renderDropdown(constants.labels.concentration, nextInput=constants.labels.password) }
 
-        { this.renderTextInput(constants.labels.password, nextInput=constants.labels.confirmPassword, hideText=true) }
+        { this.renderTextInput(constants.labels.password, s.inputText, nextInput=constants.labels.confirmPassword, hideText=true) }
 
-        { this.renderTextInput(constants.labels.confirmPassword, nextInput=null, hideText=true, returnKeyType="done") }
+        { this.renderTextInput(constants.labels.confirmPassword, s.inputText, nextInput=null, hideText=true, returnKeyType="done") }
 
         { this.renderErrorMessage() }
 

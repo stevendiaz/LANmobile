@@ -3,17 +3,13 @@ export const labels = {
     display: 'Email',
     key: 'email',
   },
-  fullname: {
-    display: 'Full name',
-    key: 'fullname',
+  firstname: {
+    display: 'First name',
+    key: 'firstname',
   },
-  nickname: {
-    display: 'Nick name',
-    key: 'nickname',
-  },
-  username: {
-    display: 'Username',
-    key: 'username',
+  lastname: {
+    display: 'Last name',
+    key: 'lastname',
   },
   password: {
     display: 'Password',
@@ -30,15 +26,15 @@ export const labels = {
   concentration: {
     display: 'Concentration',
     key: 'concentration',
-    dropdownOptions: [
-      'Computer Science',
-      'Design',
-      'Business',
-      'Electrical Engineering',
-      'Math',
-      'Management Information Systems',
-      'Other',
-    ],
+    dropdownOptions: {
+      'Computer Science': 'CS',
+      'Design': 'D',
+      'Business': 'B',
+      'Electrical Engineering': 'EE',
+      'Math': 'M',
+      'Management Information Systems': 'MIS',
+      'Other': 'O',
+    },
   },
 }
 

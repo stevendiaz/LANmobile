@@ -24,6 +24,26 @@ export default styles = (window) => {
       marginBottom: 10,
       color: 'white'
     },
+    inputTextFirst: {
+      flex: 1,
+      height: 40,
+      fontSize: 17,
+      borderBottomWidth: 1,
+      borderBottomColor: 'white',
+      marginBottom: 10,
+      marginRight: 10,
+      color: 'white'
+    },
+    inputTextLast: {
+      flex: 1,
+      height: 40,
+      fontSize: 17,
+      borderBottomWidth: 1,
+      borderBottomColor: 'white',
+      marginBottom: 10,
+      marginLeft: 10,
+      color: 'white'
+    },
     dropdownStyle: {
       width: (window.width - 40),
     },
@@ -95,8 +115,8 @@ export default styles = (window) => {
       color: 'white'
     },
     errorMessageContainer: {
-      flex: 1,
       flexDirection: 'row',
+      height: 20,
       alignItems: 'center',
       marginTop: 10,
       marginLeft: 20
