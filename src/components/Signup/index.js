@@ -56,6 +56,15 @@ export default class Signup extends Component {
     return JSON.stringify(result)
   }
 
+  _getErrors(authResponse) {
+    if (authResponse.non_field_errors) {
+      return authResponse.non_field_errors[0]
+    }
+    else if (authResponse.username && authResponse.username == constants.USERNAME_ERROR_MESSAGE) {
+      return authResponse.username[0]
+    }
+  }
+
   signUp() {
     this.passwordValidation()
     this.fieldValidation()
@@ -75,8 +84,9 @@ export default class Signup extends Component {
       .then((authResponse) => authResponse.json())
       .then((authResponse) => {
         console.log(authResponse)
-        if (authResponse.error) {
-          this.setState({ error: authResponse.error })
+        errors = this._getErrors(authResponse)
+        if (errors) {
+          this.setState({ error: errors})
         }
         else {
           console.log("200 OK Redirect to confirmation email view")
