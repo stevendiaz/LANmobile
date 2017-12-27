@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { TouchableOpacity, Picker, DatePickerIOS, Image, View, Text, KeyboardAvoidingView, Dimensions, TextInput, StatusBar } from 'react-native'
 import { connect } from 'react-redux'
+import { setSignupFormValue } from '../../actions'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import DatePicker from 'react-native-datepicker'
 import ModalDropdown from 'react-native-modal-dropdown'
@@ -25,6 +26,7 @@ class Signup extends Component {
       concentration: '',
       error: '',
     }
+    this.onFieldChange.bind(this)
   }
 
   passwordValidation() {
@@ -98,20 +100,12 @@ class Signup extends Component {
       })
   }
 
-  changeStateByKey(input, inputLabel) {
-    this.setState(previousState => {
-      previousState[inputLabel] = input
-      previousState.error = ''
-      return previousState
-    })
-  }
-
   renderDateInput(inputLabel, nextInput=null) {
 		return (
       <DatePicker
         ref={inputLabel.key}
         style={s.inputDate}
-        date={this.state[inputLabel.key]}
+        date={this.props[inputLabel.key]}
 				mode="date"
 				placeholder={inputLabel.display}
 				format="YYYY-MM-DD"
@@ -120,7 +114,9 @@ class Signup extends Component {
 				confirmBtnText="Confirm"
 				cancelBtnText="Cancel"
 				customStyles={{ dateInput: s.dateBox, dateText: s.dateText, placeholderText: s.dateText }}
-				onDateChange={(date) => {this.changeStateByKey(date, inputLabel.key)}}
+				onDateChange={(date) => {
+          this.onFieldChange(inputLabel.key, date)
+        }}
 			/>
 		)
 	}
@@ -144,7 +140,7 @@ class Signup extends Component {
         dropdownStyle={s.dropdownStyle}
         dropdownTextStyle={s.dropdownSelectionStyle}
         onSelect={ (index, value) => {
-          this.changeStateByKey(value, inputLabel.key)
+          this.onFieldChange(inputLabel.key, value)
           this.refs[nextInput.key].focus()
         }} />
     )
@@ -185,12 +181,17 @@ class Signup extends Component {
     )
   }
 
+  onFieldChange(key, value) {
+    this.props.setSignupFormValue({key, value})
+  }
+
   renderTextInput(inputLabel, style, nextInput=null, hideText=false, returnKeyType="next") {
     return (
       <TextInput
         ref={inputLabel.key}
         style={style}
-        onChangeText={(input) => this.changeStateByKey(input, inputLabel.key) }
+        onChangeText={(input) => this.onFieldChange(inputLabel.key, input) }
+        value={this.props[inputLabel.key]}
         placeholder={inputLabel.display}
         keyboardType={inputLabel.key == "email" ?  "email-address" : "default" }
         underlineColorAndroid="transparent"
@@ -238,8 +239,16 @@ class Signup extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
-  return {}
+  return {
+    email: state.signup.email,
+    password: state.signup.password,
+    confirmPassword: state.signup.confirmPassword,
+    firstname: state.signup.firstname,
+    lastname: state.signup.lastname,
+    concentration: state.signup.concentration,
+    error: state.signup.error,
+    graduationDate: state.signup.graduationDate,
+  }
 }
 
-export default connect(mapStateToProps)(Signup)
+export default connect(mapStateToProps, { setSignupFormValue })(Signup)
