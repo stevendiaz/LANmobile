@@ -3,7 +3,8 @@ import {
   PASSWORD_CHANGED,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE,
-  LOGIN_FIELD_ERROR } from './types'
+  LOGIN_FIELD_ERROR,
+  LOGIN_USER_LOADING } from './types'
 import Api from '../api'
 
 export const emailChanged = (text) => {
@@ -22,6 +23,7 @@ export const passwordChanged = (text) => {
 
 export const loginUser = ({ email, password }) => {
   return (dispatch) => {
+    dispatch({ type: LOGIN_USER_LOADING })
     api = new Api()
     api.signIn(email, password)
       .then(authResponse => loginUserRequestSuccess(dispatch, authResponse))
