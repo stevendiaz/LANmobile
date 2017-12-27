@@ -32,12 +32,8 @@ class Login extends Component {
 
         this.state = {
             loginStatus: c.LOGIN_STATUS_PENDING,
-            loading: false,
-            email: '',
-            password: '',
             hidePassword: true,
             passwordButton: showPasswordButton,
-            error: null,
             showOnboardingModal: true
         }
         this.togglePasswordHide = this.togglePasswordHide.bind(this);
@@ -67,40 +63,7 @@ class Login extends Component {
      * the error.
      */
     async login() {
-        let { email, password, loading } = this.state
-        this.setState({ error: null })
-        this.setState({ loading: true })
-        this.props.loginUser(this.props.email, this.props.password)
-        //let loginUrl = `${cfg.LOGIN_URL}?access_token=${cfg.ACCESS_TOKEN}&User[login_email]=${email}&User[login_password]=${password}`
-        let loginUrl = 'http://localhost:8000/api/v1/jwt/login/'
-        fetch(loginUrl, {
-            method: 'POST',
-            headers: {
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0',
-                'Authorization': 'Basic ' + cfg.LOGIN_SERVER_PASSWORD,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({'username': this.props.email, 'password': this.props.password })
-        })
-            .then((authResponse) => authResponse.json())
-            .then((authResponse) => {
-                this.setState({ loading: false })
-                if (authResponse.error) {
-                    this.setState({ error: authResponse.error })
-                } else {
-                    this.setState({ loginStatus: c.LOGIN_STATUS_LOGGED })
-                    AsyncStorage.setItem(c.EMAIL_KEY, email)
-                    AsyncStorage.setItem(c.PASSWORD_KEY, password)
-                    AsyncStorage.setItem(c.USER_JWT_TOKEN, authResponse.jwt_token)
-                    AsyncStorage.setItem(c.USER_ID, authResponse.user.id.toString())
-                    AsyncStorage.setItem('full_name', authResponse.user.full_name)
-                }
-            })
-            .catch((error) => {
-                this.setState({ error, loading: false })
-            })
+      this.props.loginUser(this.props.email, this.props.password)
     }
 
     /**
