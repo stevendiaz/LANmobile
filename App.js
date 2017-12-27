@@ -2,7 +2,11 @@ import React from 'react'
 import Main from './src/components/Main'
 import Login from './src/components/Login'
 import Expo from 'expo'
+import ReduxThunk from 'redux-thunk'
 import { StackNavigator } from 'react-navigation'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import reducers from './src/reducers'
 
 /**
  * Configuration options for the root StackNavigator component, responible of
@@ -47,8 +51,11 @@ export default class App extends React.Component {
       return <Expo.AppLoading />
     }
 
+    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk))
     return (
-      <AppNavigator />
+      <Provider store={store}>
+        <AppNavigator />
+      </Provider>
     )
   }
 }
