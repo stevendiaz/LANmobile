@@ -1,4 +1,5 @@
-import { LOGIN_URL } from '../config'
+import { BASE_API_URL, LOGIN_ROUTE, SIGNUP_ROUTE } from '../config'
+import * as constants from '../components/constants'
 
 export default class Api {
 
@@ -12,32 +13,36 @@ export default class Api {
   }
 
   signIn(email, password) {
-    return fetch(LOGIN_URL, {
-      method: 'POST',
-      headers: this.headers(),
-      body: JSON.stringify({'username': email, 'password': password }),
-    })
+    const loginUrl = BASE_API_URL + LOGIN_ROUTE
+    return fetch(loginUrl, {
+        method: 'POST',
+        headers: this.headers(),
+        body: JSON.stringify({'username': email, 'password': password }),
+      })
+      .then((authResponse) => authResponse.json())
+  }
+
+  getSignUpJSON(form) {
+    result = { ...form}
+    result.full_name = result.firstname + " " + result.lastname
+    result.username = result.email
+    result.graduation_date = result.graduationDate
+    result.confirm_password = result.confirmPassword
+    result.concentration = constants.labels.concentration.dropdownOptions[result.concentration]
+    console.log("result json body: " + JSON.stringify(result))
+    return JSON.stringify(result)
+  }
+
+  signUp(form) {
+    const signUpUrl = BASE_API_URL + SIGNUP_ROUTE
+    console.log("register json@@")
+    console.log(this.getSignUpJSON(form))
+    return fetch(signUpUrl, {
+        method: 'POST',
+        headers: this.headers(),
+        body: this.getSignUpJSON(form),
+      })
       .then((authResponse) => authResponse.json())
   }
 }
-/*
-      .then((authResponse) => authResponse.json())
-      .then((authResponse) => {
-        console.log("from api")
-        console.log(authResponse)
-        this.setState({ loading: false })
-        if (authResponse.error) {
-          this.setState({ error: authResponse.error })
-        } else {
-          this.setState({ loginStatus: c.LOGIN_STATUS_LOGGED })
-          AsyncStorage.setItem(c.EMAIL_KEY, email)
-          AsyncStorage.setItem(c.PASSWORD_KEY, password)
-          AsyncStorage.setItem(c.USER_JWT_TOKEN, authResponse.jwt_token)
-          AsyncStorage.setItem(c.USER_ID, authResponse.user.id.toString())
-          AsyncStorage.setItem('full_name', authResponse.user.full_name)
-        }
-      })
-      .catch((error) => {
-        //this.setState({ error, loading: false })
-      })
-*/
+

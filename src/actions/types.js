@@ -5,3 +5,8 @@ export const LOGIN_USER_FAILURE = 'login_user_failure'
 export const LOGIN_FIELD_ERROR = 'login_field_error'
 export const LOGIN_USER_LOADING = 'login_user_loading'
 export const SIGNUP_FIELD_SET = 'signup_field_set'
+export const SIGNUP_USER_SUCCESS = 'signup_user_success'
+export const SIGNUP_FIELD_ERROR = 'signup_field_error'
+export const SIGNUP_USER_FAILURE = 'signup_user_failure'
+export const SIGNUP_USER_LOADING = 'signup_user_loading'
+
