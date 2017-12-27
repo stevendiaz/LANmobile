@@ -3,7 +3,8 @@ import {
   PASSWORD_CHANGED,
   LOGIN_USER_SUCCESS,
   LOGIN_FIELD_ERROR,
-  LOGIN_USER_FAILURE } from '../actions/types'
+  LOGIN_USER_FAILURE,
+  LOGIN_USER_LOADING } from '../actions/types'
 
 const INITIAL_STATE = {
   email: '',
@@ -11,6 +12,7 @@ const INITIAL_STATE = {
   error: '',
   user: null,
   jwtToken: null,
+  loading: false,
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -20,12 +22,18 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, email: action.payload }
     case PASSWORD_CHANGED:
       return { ...state, password: action.payload }
+    case LOGIN_USER_LOADING:
+      return { ...state, loading: true }
     case LOGIN_USER_SUCCESS:
-      return { ...state, error: '', user: action.payload.user, jwtToken: action.payload.jwt_token }
+      return { ...state,
+        ...INITIAL_STATE,
+        user: action.payload.user,
+        jwtToken: action.payload.jwt_token
+      }
     case LOGIN_FIELD_ERROR:
-      return { ...state, error: action.payload }
+      return { ...state, error: action.payload, loading: false }
     case LOGIN_USER_FAILURE:
-      return { ...state, error: "Looks like something went wrong. Try again later" }
+      return { ...state, error: "Looks like something went wrong. Try again later", loading: false }
     default:
       return state
   }

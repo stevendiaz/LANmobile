@@ -150,7 +150,7 @@ class Login extends Component {
      * Method in charge of rendering the loading message
      */
     renderLoadingMessage() {
-        if (this.state.loading) {
+        if (this.props.loading) {
             return (
                 <Text style={s.loadingLabel}>Loading...</Text>
             )
@@ -277,10 +277,10 @@ const mapStateToProps = state => {
     email: state.auth.email,
     password: state.auth.password,
     error: state.auth.error,
+    loading: state.auth.loading,
   }
 }
 
 export default connect(mapStateToProps, {
     emailChanged, passwordChanged, loginUser
-  })
-  (Login)
+  })(Login)
