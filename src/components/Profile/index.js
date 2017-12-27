@@ -33,6 +33,7 @@ export default class Profile extends Component {
   render() {
 		displayString = this.state.email + " " + this.state.full_name
     this.getUserFromStorage()
+    this.logout()
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', height: window.height, padding: 20, paddingBottom: 250, backgroundColor: 'grey'}}>
         <Text>{displayString}</Text>

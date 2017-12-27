@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { TouchableOpacity, Picker, DatePickerIOS, Image, View, Text, KeyboardAvoidingView, Dimensions, TextInput, StatusBar } from 'react-native'
+import { connect } from 'react-redux'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import DatePicker from 'react-native-datepicker'
 import ModalDropdown from 'react-native-modal-dropdown'
@@ -10,7 +11,7 @@ const s = styles(window)
 const lanCrest = require('../../../resources/images/lan-crest-white.png')
 const alert = require('../../../resources/images/alert.png')
 
-export default class Signup extends Component {
+class Signup extends Component {
   constructor(props) {
     super(props)
 
@@ -236,3 +237,9 @@ export default class Signup extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  console.log(state)
+  return {}
+}
+
+export default connect(mapStateToProps)(Signup)

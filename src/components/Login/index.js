@@ -7,6 +7,9 @@ import Profile from '../Profile'
 import Signup from '../Signup'
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import styles from './styles'
+import { connect } from 'react-redux'
+import { emailChanged, passwordChanged, loginUser } from '../../actions'
+import Api from '../../api'
 
 const window = Dimensions.get('window')
 const s = styles(window)
@@ -23,7 +26,7 @@ const hidePasswordButton = require('../../../resources/images/password-hide.png'
  * If given email and password are invalid, it'll display an error message.
  * 
  */
-export default class Login extends Component {
+class Login extends Component {
     constructor(props) {
         super(props)
 
@@ -67,9 +70,9 @@ export default class Login extends Component {
         let { email, password, loading } = this.state
         this.setState({ error: null })
         this.setState({ loading: true })
+        this.props.loginUser(this.props.email, this.props.password)
         //let loginUrl = `${cfg.LOGIN_URL}?access_token=${cfg.ACCESS_TOKEN}&User[login_email]=${email}&User[login_password]=${password}`
         let loginUrl = 'http://localhost:8000/api/v1/jwt/login/'
-        console.log(loginUrl)
         fetch(loginUrl, {
             method: 'POST',
             headers: {
@@ -79,7 +82,7 @@ export default class Login extends Component {
                 'Authorization': 'Basic ' + cfg.LOGIN_SERVER_PASSWORD,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({'username': email, 'password': password })
+            body: JSON.stringify({'username': this.props.email, 'password': this.props.password })
         })
             .then((authResponse) => authResponse.json())
             .then((authResponse) => {
@@ -107,15 +110,17 @@ export default class Login extends Component {
      * @param {*} error the error propagated from the login attempt
      */
     renderErrorMessage(error) {
-        if (!error) return (
-            <Text />
-        )
+      if (this.props.error) {
         return (
-            <View style={s.errorMessageContainer}>
-                <Image source={alert} style={s.errorMessageImg} />
-                <Text style={s.errorMessageText}>Invalid username or password</Text>
-            </View>
+          <View style={s.errorMessageContainer}>
+            <Image source={alert} style={s.errorMessageImg} />
+            <Text style={s.errorMessageText}>{this.props.error}</Text>
+          </View>
         )
+      }
+      return (
+        <Text />
+      )
     }
 
     /**
@@ -183,10 +188,23 @@ export default class Login extends Component {
       return (
 				<TouchableOpacity
     				style={s.loginBtnContainer}
-    				onPress={() => this.login()}>
+    				onPress={this.onLoginButtonPress.bind(this)} >
     						<Text style={s.loginBtnText}> Login to TexasLAN </Text>
 				</TouchableOpacity>
 			)
+    }
+
+    onEmailChange(text) {
+      this.props.emailChanged(text)
+    }
+
+    onPasswordChange(text) {
+      this.props.passwordChanged(text)
+    }
+
+    onLoginButtonPress() {
+      const { email, password } = this.props
+      this.props.loginUser({ email, password })
     }
 
     render() {
@@ -204,7 +222,8 @@ export default class Login extends Component {
                         {this.renderEmailLabel()}
                         <TextInput
                             style={s.loginInputText}
-                            onChangeText={(email) => this.setState({ email })}
+                            onChangeText={this.onEmailChange.bind(this)}
+                            value={this.props.email}
                             placeholder="Email"
                             keyboardType="email-address"
                             underlineColorAndroid="transparent"
@@ -219,10 +238,11 @@ export default class Login extends Component {
                             <View style={{ flex: 10 }}>
                                 <TextInput
                                     style={s.loginInputText}
-                                    onChangeText={(password) => this.setState({ password })}
+                                    onChangeText={this.onPasswordChange.bind(this)}
                                     placeholder="Password"
                                     underlineColorAndroid="transparent"
                                     placeholderTextColor="rgba(255,255,255,1)"
+                                    value={this.props.password}
                                     ref={(input) => this.passwordInput = input}
                                     returnKeyType="done"
                                     onSubmitEditing={() => dismissKeyboard()}
@@ -237,11 +257,10 @@ export default class Login extends Component {
                             </View>
                         </View>
 
-                        {this.renderErrorMessage(error)}
                         {this.renderLoadingMessage()}
                         {this.renderLoginButton()}
                         {this.renderSignUpText()}
-
+                        {this.renderErrorMessage()}
                     </View>
                 </KeyboardAvoidingView>
             )
@@ -252,3 +271,16 @@ export default class Login extends Component {
         }
     }
 }
+
+const mapStateToProps = state => {
+  return {
+    email: state.auth.email,
+    password: state.auth.password,
+    error: state.auth.error,
+  }
+}
+
+export default connect(mapStateToProps, {
+    emailChanged, passwordChanged, loginUser
+  })
+  (Login)

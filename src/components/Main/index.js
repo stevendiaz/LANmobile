@@ -75,6 +75,11 @@ export default class Main extends Component {
             return (
                 <Login style={s.container} navigation={this.props.navigation} />
             )
+          /*
+            return (
+              <Signup/>
+            )
+          */
         }
 
         // User is logged in, lets proceed to the app
