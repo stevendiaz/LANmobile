@@ -3,7 +3,7 @@
  */
 
 import * as cfg from './config'
-import * as c from './components/constants'
+import * as c from './constants'
 import { AsyncStorage } from 'react-native'
 import moment from 'moment';
 

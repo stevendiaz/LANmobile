@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { AsyncStorage, StyleSheet, View, Image, TextInput, Text, TouchableOpacity, StatusBar, KeyboardAvoidingView, Dimensions } from 'react-native'
-import * as c from '../constants'
+import * as c from '../../constants'
 import * as cfg from '../../config'
 import { LOG } from '../../utils'
 import Profile from '../Profile'

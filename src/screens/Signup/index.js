@@ -3,10 +3,12 @@ import { TouchableOpacity, Picker, DatePickerIOS, Image, View, Text, KeyboardAvo
 import { connect } from 'react-redux'
 import { setSignupFormValue, signupUser } from '../../actions'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
-import DatePicker from 'react-native-datepicker'
-import ModalDropdown from 'react-native-modal-dropdown'
+import DateInput from '../../components/DateInput'
+import Dropdown from '../../components/Dropdown'
+import SignupTextInput from '../../components/SignupTextInput'
 import styles from './styles'
-import * as constants from '../constants'
+import * as constants from '../../constants'
+const inputProps = constants.inputProps
 const window = Dimensions.get('window')
 const s = styles(window)
 const lanCrest = require('../../../resources/images/lan-crest-white.png')
@@ -25,23 +27,15 @@ class Signup extends Component {
 
   renderDateInput(inputLabel, nextInput=null) {
 		return (
-      <DatePicker
+      <DateInput
         ref={inputLabel.key}
-        style={s.inputDate}
         date={this.props[inputLabel.key]}
-				mode="date"
-				placeholder={inputLabel.display}
-				format="YYYY-MM-DD"
-				minDate={constants.MIN_GRADUATION_DATE}
-				maxDate={constants.MAX_GRADUATION_DATE}
-				confirmBtnText="Confirm"
-				cancelBtnText="Cancel"
-				customStyles={{ dateInput: s.dateBox, dateText: s.dateText, placeholderText: s.dateText }}
+        placeholder={inputLabel.display}
 				onDateChange={(date) => {
           this.onFieldChange(inputLabel.key, date)
         }}
-			/>
-		)
+      />
+    )
 	}
 
   renderLogo() {
@@ -54,18 +48,15 @@ class Signup extends Component {
 
   renderDropdown(inputLabel, nextInput=null) {
     return (
-      <ModalDropdown
+      <Dropdown
         ref={inputLabel.key}
         options={Object.keys(inputLabel.dropdownOptions)}
         defaultValue={inputLabel.display}
-        style={s.dropdownInput}
-        textStyle={s.dropdownText}
-        dropdownStyle={s.dropdownStyle}
-        dropdownTextStyle={s.dropdownSelectionStyle}
         onSelect={ (index, value) => {
           this.onFieldChange(inputLabel.key, value)
           this.refs[nextInput.key].focus()
-        }} />
+        }}
+      />
     )
   }
 
@@ -98,8 +89,8 @@ class Signup extends Component {
   renderNameInputs() {
     return (
       <View style={{flexDirection: 'row'}}>
-        { this.renderTextInput(constants.labels.firstname, s.inputTextFirst, nextInput=constants.labels.lastname) }
-        { this.renderTextInput(constants.labels.lastname, s.inputTextLast, nextInput=constants.labels.email) }
+        { this.renderTextInput(inputProps.firstname, s.inputTextFirst, nextInput=inputProps.lastname) }
+        { this.renderTextInput(inputProps.lastname, s.inputTextLast, nextInput=inputProps.email) }
       </View>
     )
   }
@@ -108,23 +99,30 @@ class Signup extends Component {
     this.props.setSignupFormValue({key, value})
   }
 
+  onSubmitEditing(currentKey, nextKey) {
+    confirmPassword = inputProps.confirmPassword.key
+    graduationDate = inputProps.graduationDate.key
+    if (currentKey == confirmPassword) {
+      dismissKeyboard()
+    }
+    else {
+      nextKey == graduationDate ? this.refs[nextKey].onPressDate() : this.refs[nextKey].focus()
+    }
+  }
+
   renderTextInput(inputLabel, style, nextInput=null, hideText=false, returnKeyType="next") {
     return (
-      <TextInput
+      <SignupTextInput
         ref={inputLabel.key}
         style={style}
         onChangeText={(input) => this.onFieldChange(inputLabel.key, input) }
         value={this.props[inputLabel.key]}
         placeholder={inputLabel.display}
-        keyboardType={inputLabel.key == "email" ?  "email-address" : "default" }
-        underlineColorAndroid="transparent"
-        autoCapitalize="none"
-        autoCorrect={false}
+        keyboardType={inputLabel.key == inputProps.email.key ?  "email-address" : "default" }
         returnKeyType={returnKeyType}
-        placeholderTextColor="rgba(255,255,255,1)"
-        onSubmitEditing={() => { inputLabel.key == "confirmPassword" ? dismissKeyboard() : nextInput.key == "graduationDate" ? this.refs[nextInput.key].onPressDate() : this.refs[nextInput.key].focus() }}
+        onSubmitEditing={(event) => this.onSubmitEditing(inputLabel.key, nextInput.key)}
         secureTextEntry={hideText}
-        selectionColor="white" />
+        />
     )
   }
 
@@ -132,20 +130,13 @@ class Signup extends Component {
     return (
       <View style={s.container}>
         { this.renderLogo() }
-
         { this.renderNameInputs() }
-
-        { this.renderTextInput(constants.labels.email, s.inputText, nextInput=constants.labels.graduationDate) }
-
-        { this.renderDateInput(constants.labels.graduationDate, nextInput=constants.labels.concentration) }
-        { this.renderDropdown(constants.labels.concentration, nextInput=constants.labels.password) }
-
-        { this.renderTextInput(constants.labels.password, s.inputText, nextInput=constants.labels.confirmPassword, hideText=true) }
-
-        { this.renderTextInput(constants.labels.confirmPassword, s.inputText, nextInput=null, hideText=true, returnKeyType="done") }
-
+        { this.renderTextInput(inputProps.email, s.inputText, nextInput=inputProps.graduationDate) }
+        { this.renderDateInput(inputProps.graduationDate, nextInput=inputProps.concentration) }
+        { this.renderDropdown(inputProps.concentration, nextInput=inputProps.password) }
+        { this.renderTextInput(inputProps.password, s.inputText, nextInput=inputProps.confirmPassword, hideText=true) }
+        { this.renderTextInput(inputProps.confirmPassword, s.inputText, nextInput=null, hideText=true, returnKeyType="done") }
         { this.renderErrorMessage() }
-
         { this.renderSignupButton() }
       </View>
     )

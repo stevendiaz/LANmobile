@@ -1,5 +1,5 @@
 import { BASE_API_URL, LOGIN_ROUTE, SIGNUP_ROUTE } from '../config'
-import * as constants from '../components/constants'
+import * as constants from '../constants'
 
 export default class Api {
 
