@@ -28,8 +28,7 @@ export default class Api {
     result.username = result.email
     result.graduation_date = result.graduationDate
     result.confirm_password = result.confirmPassword
-    result.concentration = constants.labels.concentration.dropdownOptions[result.concentration]
-    console.log("result json body: " + JSON.stringify(result))
+    result.concentration = constants.inputProps.concentration.dropdownOptions[result.concentration]
     return JSON.stringify(result)
   }
 
