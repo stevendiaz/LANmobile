@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { AsyncStorage, StyleSheet, View, KeyboardAvoidingView, Image, Text, Dimensions } from 'react-native'
-import * as constants from '../constants'
+import * as constants from '../../constants'
 import Login from '../Login'
-import Loading from '../Common/Loading'
+import Loading from '../../components/Common/Loading'
 import Profile from '../Profile'
 import Signup from '../Signup'
 
@@ -72,14 +72,14 @@ export default class Main extends Component {
         }
 
         if (loginStatus === constants.LOGIN_STATUS_NOT_LOGGED) {
+          /*
             return (
                 <Login style={s.container} navigation={this.props.navigation} />
             )
-          /*
+          */
             return (
               <Signup/>
             )
-          */
         }
 
         // User is logged in, lets proceed to the app

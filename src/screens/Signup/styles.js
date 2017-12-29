@@ -12,10 +12,6 @@ export default styles = (window) => {
       height: window.height,
       backgroundColor: '#145991',
     },
-    dateText: {
-      fontSize: 17,
-      color: "rgba(255, 255, 255, 1)",
-    },
     inputText: {
       height: 40,
       fontSize: 17,
@@ -60,17 +56,6 @@ export default styles = (window) => {
     },
     dropdownInput: {
       height: 40,
-      borderBottomWidth: 1,
-      borderBottomColor: 'white',
-      marginBottom: 10,
-    },
-    dateBox: {
-      borderWidth: 0,
-      alignItems: 'flex-start',
-    },
-    inputDate: {
-      height: 40,
-			width: undefined,
       borderBottomWidth: 1,
       borderBottomColor: 'white',
       marginBottom: 10,

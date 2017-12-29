@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { AsyncStorage, View, Text } from 'react-native'
-import * as c from '../constants'
+import * as c from '../../constants'
 
 export default class Profile extends Component {
 

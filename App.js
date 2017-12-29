@@ -1,6 +1,6 @@
 import React from 'react'
-import Main from './src/components/Main'
-import Login from './src/components/Login'
+import Main from './src/screens/Main'
+import Login from './src/screens/Login'
 import Expo from 'expo'
 import ReduxThunk from 'redux-thunk'
 import { StackNavigator } from 'react-navigation'

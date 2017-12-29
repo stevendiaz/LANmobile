@@ -11,7 +11,7 @@ import {
   SIGNUP_USER_FAILURE,
   SIGNUP_USER_LOADING } from './types'
 import Api from '../api'
-import { MIN_PASSWORD_LENGTH, USERNAME_ERROR_MESSAGE, labels } from '../components/constants'
+import { MIN_PASSWORD_LENGTH, USERNAME_ERROR_MESSAGE, labels } from '../constants'
 
 export const emailChanged = (text) => {
   return {
