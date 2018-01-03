@@ -99,14 +99,14 @@ class Signup extends Component {
     this.props.setSignupFormValue({key, value})
   }
 
-  onSubmitEditing(currentKey, nextKey) {
+  onSubmitEditing(currentInput, nextInput) {
     confirmPassword = inputProps.confirmPassword.key
     graduationDate = inputProps.graduationDate.key
-    if (currentKey == confirmPassword) {
+    if (currentInput.key == confirmPassword) {
       dismissKeyboard()
     }
     else {
-      nextKey == graduationDate ? this.refs[nextKey].onPressDate() : this.refs[nextKey].focus()
+      nextInput.key == graduationDate ? this.refs[nextInput.key].onPressDate() : this.refs[nextInput.key].focus()
     }
   }
 
@@ -120,9 +120,20 @@ class Signup extends Component {
         placeholder={inputLabel.display}
         keyboardType={inputLabel.key == inputProps.email.key ?  "email-address" : "default" }
         returnKeyType={returnKeyType}
-        onSubmitEditing={(event) => this.onSubmitEditing(inputLabel.key, nextInput.key)}
+        onSubmitEditing={(event) => this.onSubmitEditing(inputLabel, nextInput)}
         secureTextEntry={hideText}
         />
+    )
+  }
+
+  renderLoginText() {
+    const loginText = "Have an account already? Log in here"
+    return (
+      <TouchableOpacity
+        style={s.loginView}
+        onPress={() => this.props.navigation.navigate('Login')}>
+          <Text style={s.loginText}>{loginText}</Text>
+      </TouchableOpacity>
     )
   }
 
@@ -138,6 +149,7 @@ class Signup extends Component {
         { this.renderTextInput(inputProps.confirmPassword, s.inputText, nextInput=null, hideText=true, returnKeyType="done") }
         { this.renderErrorMessage() }
         { this.renderSignupButton() }
+        { this.renderLoginText() }
       </View>
     )
   }

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { AsyncStorage, View, Text } from 'react-native'
 import * as c from '../../constants'
+import { connect } from 'react-redux'
 
-export default class Profile extends Component {
+class Profile extends Component {
 
   constructor(props) {
     super(props)
@@ -31,7 +32,7 @@ export default class Profile extends Component {
   }
 
   render() {
-		displayString = this.state.email + " " + this.state.full_name
+		displayString = this.props.user.email + " " + this.props.user.full_name
     this.getUserFromStorage()
     this.logout()
     return (
@@ -39,6 +40,12 @@ export default class Profile extends Component {
         <Text>{displayString}</Text>
       </View>
     )
-
   }
 }
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user,
+  }
+}
+
+export default connect(mapStateToProps)(Profile)

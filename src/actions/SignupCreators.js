@@ -4,7 +4,7 @@ import {
   SIGNUP_FIELD_ERROR,
   SIGNUP_USER_FAILURE,
   SIGNUP_USER_LOADING } from './types'
-import { MIN_PASSWORD_LENGTH, USERNAME_ERROR_MESSAGE, labels } from '../constants'
+import { MIN_PASSWORD_LENGTH, USERNAME_ERROR_MESSAGE, inputProps } from '../constants'
 import Api from '../api'
 
 export const setSignupFormValue = ({ key, value }) => {
@@ -82,8 +82,8 @@ const validate = (form) => {
     errors.push("Passwords must be at least" + MIN_PASSWORD_LENGTH + " characters")
   }
   for (let key of Object.keys(form)) {
-    if (isError(key, form)) {
-      errors.push(labels[key].display + " field is blank")
+    if (key in inputProps && !form[key]) {
+      errors.push(inputProps[key].display + " field is blank")
     }
   }
   return errors

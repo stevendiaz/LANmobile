@@ -112,5 +112,13 @@ export default styles = (window) => {
       width: 20,
       height: 20
     },
+    loginText: {
+      color: 'white',
+    },
+    loginView: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 20,
+    },
   })
 }

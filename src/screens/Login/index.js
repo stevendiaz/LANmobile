@@ -141,7 +141,7 @@ class Login extends Component {
       return (
           <TouchableOpacity
               style={s.signUpView}
-              onPress={() => console.log('pressed')}>
+              onPress={() => this.props.navigation.navigate('Signup')}>
                   <Text style={s.signUpText}>{signUpText}</Text>
           </TouchableOpacity>
       )

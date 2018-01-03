@@ -34,14 +34,15 @@ export default class Api {
 
   signUp(form) {
     const signUpUrl = BASE_API_URL + SIGNUP_ROUTE
-    console.log("register json@@")
-    console.log(this.getSignUpJSON(form))
     return fetch(signUpUrl, {
         method: 'POST',
         headers: this.headers(),
         body: this.getSignUpJSON(form),
       })
       .then((authResponse) => authResponse.json())
+      .catch((error) => {
+        console.log(error)
+      })
   }
 }
 

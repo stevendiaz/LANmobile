@@ -1,6 +1,7 @@
 import React from 'react'
 import Main from './src/screens/Main'
 import Login from './src/screens/Login'
+import Signup from './src/screens/Signup'
 import Expo from 'expo'
 import ReduxThunk from 'redux-thunk'
 import { StackNavigator } from 'react-navigation'
@@ -22,9 +23,10 @@ const navigatorOptions = {
  * On this constant, its defined the different sections to which the app
  * can navigate.
  */
-const AppNavigator = StackNavigator({
-  Main: { screen: Main },
+const EntryStack = StackNavigator({
   Login: { screen: Login },
+  Signup: { screen: Signup },
+  Main: { screen: Main },
 }, navigatorOptions)
 
 /**
@@ -54,7 +56,7 @@ export default class App extends React.Component {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk))
     return (
       <Provider store={store}>
-        <AppNavigator />
+        <EntryStack />
       </Provider>
     )
   }
