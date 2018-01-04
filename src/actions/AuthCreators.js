@@ -6,6 +6,7 @@ import {
   LOGIN_FIELD_ERROR,
   LOGIN_USER_LOADING }from './types'
 import Api from '../api'
+import { NavigationActions } from 'react-navigation'
 
 export const emailChanged = (text) => {
   return {
@@ -45,6 +46,10 @@ const loginUserRequestSuccess = (dispatch, authResponse) => {
     dispatch({
       type: LOGIN_USER_SUCCESS,
       payload: authResponse,
+    })
+    dispatch({
+      type: NavigationActions.NAVIGATE,
+      routeName: 'drawerStack',
     })
   }
   else {

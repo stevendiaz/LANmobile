@@ -40,23 +40,6 @@ class Login extends Component {
     }
 
     /**
-     * Given the authentication login response, extracts the corresponding
-     * user id.
-     * @param {*} authResponse the authentication login reponse
-     * @return the user id, or 0 if auth response is null or does not have
-     * a user id
-     */
-    getUserId(authResponse) {
-        if (!authResponse) return 0
-
-        if (authResponse.user['Student']) return `student:${authResponse.user['Student'].id}`
-        if (authResponse.user['SchoolAdminId']) return `school_admin:${authResponse.user['SchoolAdminId']}`
-        if (authResponse.user['Guardian']) return `guardian:${authResponse.user['Guardian'].id}`
-
-        return 0
-    }
-
-    /**
      * This method is in charge of attempting to authenticate user with the
      * given credentials and persist the login data in the app in case of
      * success. If authentication attempt fails, it will properly propagate

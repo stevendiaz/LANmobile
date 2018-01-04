@@ -1,33 +1,11 @@
 import React from 'react'
-import Main from './src/screens/Main'
-import Login from './src/screens/Login'
-import Signup from './src/screens/Signup'
+import RootNavigation from './src/navigation/ReduxNavigation'
 import Expo from 'expo'
 import ReduxThunk from 'redux-thunk'
 import { StackNavigator } from 'react-navigation'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import reducers from './src/reducers'
-
-/**
- * Configuration options for the root StackNavigator component, responible of
- * handling routing of application sections.
- * @headerMode: Parameter to determine whether or not navigable sections
- * should include the default nav bar.
- */
-const navigatorOptions = {
-  headerMode: 'none'
-}
-
-/**
- * On this constant, its defined the different sections to which the app
- * can navigate.
- */
-const EntryStack = StackNavigator({
-  Login: { screen: Login },
-  Signup: { screen: Signup },
-  Main: { screen: Main },
-}, navigatorOptions)
 
 /**
  * Application entry point.
@@ -56,7 +34,7 @@ export default class App extends React.Component {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk))
     return (
       <Provider store={store}>
-        <EntryStack />
+        <RootNavigation />
       </Provider>
     )
   }
