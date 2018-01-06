@@ -4,7 +4,8 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE,
   LOGIN_FIELD_ERROR,
-  LOGIN_USER_LOADING }from './types'
+  LOGIN_USER_LOADING,
+  LOGIN_PERSISTED_USER }from './types'
 import Api from '../api'
 import { NavigationActions } from 'react-navigation'
 
@@ -19,6 +20,13 @@ export const passwordChanged = (text) => {
   return {
     type: PASSWORD_CHANGED,
     payload: text
+  }
+}
+
+export const loginPersistedUser = (user) => {
+  return {
+    type: LOGIN_PERSISTED_USER,
+    payload: user,
   }
 }
 

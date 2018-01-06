@@ -1,4 +1,4 @@
-import { BASE_API_URL, LOGIN_ROUTE, SIGNUP_ROUTE } from '../config'
+import { BASE_API_URL, LOGIN_ROUTE, SIGNUP_ROUTE, REFRESH_JWT_ROUTE } from '../config'
 import * as constants from '../constants'
 
 export default class Api {
@@ -22,7 +22,7 @@ export default class Api {
       .then((authResponse) => authResponse.json())
   }
 
-  getSignUpJSON(form) {
+  _getSignUpJSON(form) {
     result = { ...form}
     result.full_name = result.firstname + " " + result.lastname
     result.username = result.email
@@ -37,12 +37,29 @@ export default class Api {
     return fetch(signUpUrl, {
         method: 'POST',
         headers: this.headers(),
-        body: this.getSignUpJSON(form),
+        body: this._getSignUpJSON(form),
       })
       .then((authResponse) => authResponse.json())
       .catch((error) => {
         console.log(error)
       })
+  }
+
+  _tokenJSON(jwtToken) {
+    return JSON.stringify({'token': jwtToken})
+  }
+
+  refreshUserToken(jwtToken) {
+    const refreshUrl = BASE_API_URL + REFRESH_JWT_ROUTE
+    return fetch(refreshUrl, {
+      method: 'POST',
+      headers: this.headers(),
+      body: this._tokenJSON(jwtToken),
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      console.log('refreshusertoken error: ' + error)
+    })
   }
 }
 

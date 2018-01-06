@@ -7,7 +7,7 @@ import Profile from '../screens/Profile'
 const DrawerStack = DrawerNavigator({
   screen1: { screen: Profile },
 }, {
-  gesturesEndabled: false,
+  gesturesEnabled: false,
 })
 
 const DrawerNavigation = StackNavigator({
@@ -15,7 +15,7 @@ const DrawerNavigation = StackNavigator({
 }, {
   headerMode: 'float',
   navigationOptions: ({navigation}) => ({
-    headerStyle: {backgroundColor: '#4C3E54'},
+    headerStyle: {backgroundColor: '#145991'},
     title: 'Welcome!',
     headerTintColor: 'white',
     gesturesEnabled: false,
@@ -34,6 +34,7 @@ const AppNavigation = StackNavigator({
   drawerStack: { screen: DrawerNavigation },
 }, {
   headerMode: 'none',
+  initialRouteName: 'loginStack',
 })
 
 export default AppNavigation

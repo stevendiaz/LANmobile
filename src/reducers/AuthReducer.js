@@ -4,7 +4,8 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_FIELD_ERROR,
   LOGIN_USER_FAILURE,
-  LOGIN_USER_LOADING } from '../actions/types'
+  LOGIN_USER_LOADING,
+  LOGIN_PERSISTED_USER, } from '../actions/types'
 
 const INITIAL_STATE = {
   email: '',
@@ -26,6 +27,11 @@ export default (state = INITIAL_STATE, action) => {
     case LOGIN_USER_SUCCESS:
       return { ...state,
         ...INITIAL_STATE,
+        user: action.payload.user,
+        jwtToken: action.payload.jwt_token
+      }
+    case LOGIN_PERSISTED_USER:
+      return { ...state,
         user: action.payload.user,
         jwtToken: action.payload.jwt_token
       }

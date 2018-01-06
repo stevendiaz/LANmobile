@@ -8,7 +8,7 @@ import Signup from '../Signup'
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import styles from './styles'
 import { connect } from 'react-redux'
-import { emailChanged, passwordChanged, loginUser } from '../../actions'
+import { emailChanged, passwordChanged, loginUser, loginPersistedUser } from '../../actions'
 import Api from '../../api'
 
 const window = Dimensions.get('window')
@@ -27,17 +27,17 @@ const hidePasswordButton = require('../../../resources/images/password-hide.png'
  * 
  */
 class Login extends Component {
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props)
 
-        this.state = {
-            loginStatus: c.LOGIN_STATUS_PENDING,
-            hidePassword: true,
-            passwordButton: showPasswordButton,
-            showOnboardingModal: true
-        }
-        this.togglePasswordHide = this.togglePasswordHide.bind(this);
+    this.state = {
+      jwtToken: null,
+      hidePassword: true,
+      passwordButton: showPasswordButton,
+      loading: true,
     }
+    this.togglePasswordHide = this.togglePasswordHide.bind(this);
+  }
 
     /**
      * This method is in charge of attempting to authenticate user with the
@@ -103,13 +103,27 @@ class Login extends Component {
         }
     }
 
+    async _writePersistedJwtToken(jwtResponse) {
+      if (jwtResponse.jwt_token) {
+        this.setState({ jwtToken: jwtResponse.jwt_token })
+        await AsyncStorage.setItem(c.USER_JWT_TOKEN, jwtResponse.jwt_token)
+      }
+    }
+
+    async _refreshAndLoginUser(jwtToken) {
+      jwtRefreshResponse = await new Api().refreshUserToken(jwtToken)
+      await this._writePersistedJwtToken(jwtRefreshResponse)
+      this.props.loginPersistedUser(jwtRefreshResponse)
+      this.props.navigation.navigate('drawerStack')
+    }
+
     async componentWillMount() {
-        let showOnboardingModal = await AsyncStorage.getItem(c.ONBOARDING_VISIBLE)
-        if (showOnboardingModal) {
-            this.setState({ showOnboardingModal })
-        } else {
-            this.setState({ showOnboardingModal: false })
-        }
+      try {
+        let jwtToken = await AsyncStorage.getItem(c.USER_JWT_TOKEN)
+        jwtToken ? this._refreshAndLoginUser(jwtToken) : this.setState({ loading: false })
+      } catch (error) {
+        this.setState({ loading: false })
+      }
     }
 
     togglePasswordHide() {
@@ -155,7 +169,7 @@ class Login extends Component {
 
     render() {
         let { loginStatus, error, showOnboardingModal } = this.state
-        if (loginStatus === c.LOGIN_STATUS_PENDING) {
+        if (!this.state.loading) {
             return (
                 <KeyboardAvoidingView behavior="position" style={s.keyboardContainer}>
                     <View style={s.container}>
@@ -211,10 +225,12 @@ class Login extends Component {
                 </KeyboardAvoidingView>
             )
         } else {
-            return (
-            	<Profile/>
-            )
-        }
+          return (
+            <View>
+              <Text>TEMP LOADING SCREEN</Text>
+            </View>
+          )
+      }
     }
 }
 
@@ -228,5 +244,5 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, {
-    emailChanged, passwordChanged, loginUser
+    emailChanged, passwordChanged, loginUser, loginPersistedUser
   })(Login)
