@@ -5,6 +5,7 @@ import * as cfg from '../../config'
 import { LOG } from '../../utils'
 import Profile from '../Profile'
 import Signup from '../Signup'
+import LoginTextInput from '../../components/SignupTextInput'
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import styles from './styles'
 import { connect } from 'react-redux'
@@ -73,7 +74,7 @@ class Login extends Component {
      * Method in charge of rendering the email label
      */
     renderEmailLabel() {
-        if (this.state.email) {
+        if (this.props.email) {
             return (
                 <Text style={s.loginInputLabel}>Email</Text>
             )
@@ -84,8 +85,7 @@ class Login extends Component {
      * Method in charge of rendering the password label
      */
     renderPasswordLabel() {
-        let { password } = this.state
-        if (password) {
+        if (this.props.password) {
             return (
                 <Text style={s.loginInputLabel}>Password</Text>
             )
@@ -167,56 +167,73 @@ class Login extends Component {
       this.props.loginUser({ email, password })
     }
 
+    renderEmailInput() {
+      return (
+        <LoginTextInput
+          style={s.loginInputText}
+          onChangeText={this.onEmailChange.bind(this)}
+          value={this.props.email}
+          placeholder="Email"
+          keyboardType="email-address"
+          secureTextEntry={false}
+          returnKeyType="next"
+          onSubmitEditing={() => this.passwordInput.focus()}
+          />
+      )
+    }
+
+    renderPasswordInput() {
+      return (
+        <LoginTextInput
+          style={s.loginInputText}
+          onChangeText={this.onPasswordChange.bind(this)}
+          value={this.props.password}
+          placeholder="Password"
+          keyboardType="default"
+          secureTextEntry={false}
+          returnKeyType="next"
+          onSubmitEditing={() => dismissKeyboard()}
+          />
+      )
+    }
+
+    renderPasswordField() {
+      return (
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ flex: 10 }}>
+            {this.renderPasswordInput()}
+          </View>
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity
+              style={s.hidePasswordButton}
+              onPress={() => this.togglePasswordHide()}>
+              <Image source={this.state.passwordButton} style={s.passwordButton} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    }
+
+    renderLogo() {
+      return (
+        <View style={s.logoContainer}>
+          <Image resizeMode="contain" style={s.lanCrest} source={lanCrest} />
+        </View>
+      )
+    }
+
     render() {
         let { loginStatus, error, showOnboardingModal } = this.state
         if (!this.state.loading) {
             return (
                 <KeyboardAvoidingView behavior="position" style={s.keyboardContainer}>
                     <View style={s.container}>
-                        <View style={s.logoContainer}>
-                            <Image resizeMode="contain" style={s.lanCrest} source={lanCrest} />
-                        </View>
-
+                        {this.renderLogo()}
                         <StatusBar barStyle="light-content" />
-
                         {this.renderEmailLabel()}
-                        <TextInput
-                            style={s.loginInputText}
-                            onChangeText={this.onEmailChange.bind(this)}
-                            value={this.props.email}
-                            placeholder="Email"
-                            keyboardType="email-address"
-                            underlineColorAndroid="transparent"
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            onSubmitEditing={() => this.passwordInput.focus()}
-                            placeholderTextColor="rgba(255,255,255,1)" />
-
+                        {this.renderEmailInput()}
                         {this.renderPasswordLabel()}
-
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flex: 10 }}>
-                                <TextInput
-                                    style={s.loginInputText}
-                                    onChangeText={this.onPasswordChange.bind(this)}
-                                    placeholder="Password"
-                                    underlineColorAndroid="transparent"
-                                    placeholderTextColor="rgba(255,255,255,1)"
-                                    value={this.props.password}
-                                    ref={(input) => this.passwordInput = input}
-                                    returnKeyType="done"
-                                    onSubmitEditing={() => dismissKeyboard()}
-                                    secureTextEntry={this.state.hidePassword} />
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <TouchableOpacity
-                                    style={s.hidePasswordButton}
-                                    onPress={() => this.togglePasswordHide()}>
-                                    <Image source={this.state.passwordButton} style={s.passwordButton} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
+                        {this.renderPasswordField()}
                         {this.renderLoadingMessage()}
                         {this.renderLoginButton()}
                         {this.renderSignUpText()}
