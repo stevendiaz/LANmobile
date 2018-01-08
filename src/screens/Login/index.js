@@ -34,7 +34,7 @@ class Login extends Component {
     this.state = {
       jwtToken: null,
       hidePassword: true,
-      passwordButton: showPasswordButton,
+      passwordButton: hidePasswordButton,
       loading: true,
     }
     this.togglePasswordHide = this.togglePasswordHide.bind(this);
@@ -129,7 +129,7 @@ class Login extends Component {
     togglePasswordHide() {
         this.setState({
             hidePassword: this.state.hidePassword ? false : true,
-            passwordButton: this.state.hidePassword ? hidePasswordButton : showPasswordButton
+            passwordButton: this.state.hidePassword ? showPasswordButton : hidePasswordButton
         })
     }
 
@@ -190,7 +190,7 @@ class Login extends Component {
           value={this.props.password}
           placeholder="Password"
           keyboardType="default"
-          secureTextEntry={false}
+          secureTextEntry={this.state.hidePassword}
           returnKeyType="next"
           onSubmitEditing={() => dismissKeyboard()}
           />
