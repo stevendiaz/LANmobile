@@ -7,7 +7,9 @@ import {
   LOGIN_USER_LOADING,
   LOGIN_PERSISTED_USER }from './types'
 import Api from '../api'
+import { AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
+import { USER_JWT_TOKEN } from '../constants.js'
 
 export const emailChanged = (text) => {
   return {
@@ -49,8 +51,9 @@ const loginUserFailure = (dispatch) => {
   })
 }
 
-const loginUserRequestSuccess = (dispatch, authResponse) => {
+const loginUserRequestSuccess = async (dispatch, authResponse) => {
   if (!authResponse.non_field_errors) {
+    await AsyncStorage.setItem(USER_JWT_TOKEN, authResponse.jwt_token)
     dispatch({
       type: LOGIN_USER_SUCCESS,
       payload: authResponse,
