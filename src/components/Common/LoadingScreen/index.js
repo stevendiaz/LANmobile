@@ -14,7 +14,7 @@ export default class LoadingScreen extends Component {
                 <Spinner visible={true}
                     textContent={text}
                     textStyle={{ color: '#FFF' }}
-                    overlayColor="#6B9A25" />
+                    overlayColor="#145991" />
             </View>
         )
     }

@@ -5,6 +5,7 @@ import * as cfg from '../../config'
 import { LOG } from '../../utils'
 import Profile from '../Profile'
 import Signup from '../Signup'
+import LoadingScreen from '../../components/Common/LoadingScreen'
 import LoginTextInput from '../../components/SignupTextInput'
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import styles from './styles'
@@ -115,6 +116,7 @@ class Login extends Component {
       await this._writePersistedJwtToken(jwtRefreshResponse)
       this.props.loginPersistedUser(jwtRefreshResponse)
       this.props.navigation.navigate('drawerStack')
+      this.setState({ loading: false })
     }
 
     async componentWillMount() {
@@ -243,9 +245,7 @@ class Login extends Component {
             )
         } else {
           return (
-            <View>
-              <Text>TEMP LOADING SCREEN</Text>
-            </View>
+            <LoadingScreen/>
           )
       }
     }
