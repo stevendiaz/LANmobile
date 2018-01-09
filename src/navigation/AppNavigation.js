@@ -4,12 +4,14 @@ import Login from '../screens/Login'
 import Signup from '../screens/Signup'
 import Profile from '../screens/Profile'
 import MenuBar from '../components/MenuBar'
+import NavigationDrawer from '../components/NavigationDrawer'
 import { colors } from '../constants'
 
 const DrawerStack = DrawerNavigator({
   screen1: { screen: Profile },
 }, {
   gesturesEnabled: false,
+  contentComponent: NavigationDrawer,
 })
 
 const DrawerNavigation = StackNavigator({

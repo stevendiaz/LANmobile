@@ -6,6 +6,7 @@ import dismissKeyboard from 'react-native-dismiss-keyboard'
 import DateInput from '../../components/DateInput'
 import Dropdown from '../../components/Dropdown'
 import SignupTextInput from '../../components/SignupTextInput'
+import { NavigationActions } from 'react-navigation'
 import styles from './styles'
 import * as constants from '../../constants'
 const inputProps = constants.inputProps
@@ -126,12 +127,17 @@ class Signup extends Component {
     )
   }
 
+  _navigateBackToLogin() {
+    const backAction = NavigationActions.back()
+    this.props.navigation.dispatch(backAction)
+  }
+
   renderLoginText() {
     const loginText = "Have an account already? Log in here"
     return (
       <TouchableOpacity
         style={s.loginView}
-        onPress={() => this.props.navigation.navigate('Login')}>
+        onPress={() => this._navigateBackToLogin()}>
           <Text style={s.loginText}>{loginText}</Text>
       </TouchableOpacity>
     )

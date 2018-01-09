@@ -5,11 +5,18 @@ import {
   LOGIN_USER_FAILURE,
   LOGIN_FIELD_ERROR,
   LOGIN_USER_LOADING,
-  LOGIN_PERSISTED_USER }from './types'
+  LOGIN_PERSISTED_USER,
+  LOGOUT_USER, }from './types'
 import Api from '../api'
 import { AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { USER_JWT_TOKEN } from '../constants.js'
+
+export const logoutUser = () => {
+  return {
+    type: LOGOUT_USER
+  }
+}
 
 export const emailChanged = (text) => {
   return {

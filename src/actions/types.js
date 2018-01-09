@@ -10,4 +10,5 @@ export const SIGNUP_USER_SUCCESS = 'signup_user_success'
 export const SIGNUP_FIELD_ERROR = 'signup_field_error'
 export const SIGNUP_USER_FAILURE = 'signup_user_failure'
 export const SIGNUP_USER_LOADING = 'signup_user_loading'
+export const LOGOUT_USER = 'logout_user'
 

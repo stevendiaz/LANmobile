@@ -5,7 +5,8 @@ import {
   LOGIN_FIELD_ERROR,
   LOGIN_USER_FAILURE,
   LOGIN_USER_LOADING,
-  LOGIN_PERSISTED_USER, } from '../actions/types'
+  LOGIN_PERSISTED_USER,
+  LOGOUT_USER, } from '../actions/types'
 
 const INITIAL_STATE = {
   email: '',
@@ -18,6 +19,8 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case LOGOUT_USER:
+      return {...state, jwtToken: null }
     case EMAIL_CHANGED:
       return { ...state, email: action.payload }
     case PASSWORD_CHANGED:
