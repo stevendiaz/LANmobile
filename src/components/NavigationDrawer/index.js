@@ -4,6 +4,7 @@ import { NavigationActions } from 'react-navigation'
 import { connect }  from 'react-redux'
 import { logoutUser } from '../../actions'
 import * as c from '../../constants'
+import styles from './styles'
 
 class NavigationDrawer extends Component {
 
@@ -28,47 +29,22 @@ class NavigationDrawer extends Component {
       <View style={styles.container}>
         <Text
           onPress={() => navigation.navigate('screen1')}
-          style={styles.uglyDrawerItem}>
-          Screen 1
+          style={styles.drawerItem}>
+          Events
         </Text>
         <Text
           onPress={() => navigation.navigate('screen2')}
-          style={styles.uglyDrawerItem}>
-          Screen 2
-        </Text>
-        <Text
-          onPress={() => navigation.navigate('screen3')}
-          style={styles.uglyDrawerItem}>
-          Screen 3
+          style={styles.drawerItem}>
+          Profile
         </Text>
         <Text
           onPress={() => this.logout()}
-          style={styles.uglyDrawerItem}>
+          style={styles.logoutItem}>
           Log Out
 				</Text>
       </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f6f6f6',
-    paddingTop: 40,
-    paddingHorizontal: 20
-  },
-  uglyDrawerItem: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#E73536',
-    padding: 15,
-    margin: 5,
-    borderRadius: 2,
-    borderColor: '#E73536',
-    borderWidth: 1,
-    textAlign: 'center'
-  }
-})
 
 export default connect(null, { logoutUser })(NavigationDrawer)
