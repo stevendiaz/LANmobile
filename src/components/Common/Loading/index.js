@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, Image, Text, View, KeyboardAvoidingView, Dimensions } from 'react-native'
+import { colors } from '../../../constants'
 
 const logoImage = require('../../../../resources/images/lan-crest-white.png')
 const window = Dimensions.get('window')
@@ -23,7 +24,7 @@ export default class Loading extends Component {
 const s = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#145991',
+        backgroundColor: colors.primary,
     },
     logoContainer: {
         flexGrow: 1,

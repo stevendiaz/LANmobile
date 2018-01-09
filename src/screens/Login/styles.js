@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { colors } from '../../constants'
 
 export default styles = (window) => {
     return StyleSheet.create({
@@ -10,7 +11,7 @@ export default styles = (window) => {
             padding: 20,
             paddingBottom: 250,
             height: window.height,
-            backgroundColor: '#145991',
+            backgroundColor: colors.primary,
         },
         signUpText: {
           color: 'white',
