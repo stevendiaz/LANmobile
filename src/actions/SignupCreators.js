@@ -5,6 +5,7 @@ import {
   SIGNUP_USER_FAILURE,
   SIGNUP_USER_LOADING } from './types'
 import { MIN_PASSWORD_LENGTH, USERNAME_ERROR_MESSAGE, inputProps } from '../constants'
+import { NavigationActions } from 'react-navigation'
 import Api from '../api'
 
 export const setSignupFormValue = ({ key, value }) => {
@@ -63,6 +64,10 @@ const signupUserRequestSuccess = (dispatch, authResponse) => {
     dispatch({
       type: SIGNUP_USER_SUCCESS,
       payload: authResponse,
+    })
+    dispatch({
+      type: NavigationActions.NAVIGATE,
+      routeName: 'Login'
     })
   }
   else {

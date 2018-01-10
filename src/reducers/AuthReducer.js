@@ -7,7 +7,9 @@ import {
   LOGIN_USER_LOADING,
   LOGIN_PERSISTED_USER,
   LOGOUT_USER,
-  TOGGLE_RUSH_MODAL, } from '../actions/types'
+  TOGGLE_RUSH_MODAL,
+  SIGNUP_USER_SUCCESS,
+  TOGGLE_SIGNUP_COMPLETE_MODAL} from '../actions/types'
 
 const INITIAL_STATE = {
   email: '',
@@ -17,12 +19,17 @@ const INITIAL_STATE = {
   jwtToken: null,
   loading: false,
   showRushModal: false,
+  showSignupCompleteModal: false,
 }
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case TOGGLE_SIGNUP_COMPLETE_MODAL:
+      return {...state, showSignupCompleteModal: action.payload}
+    case SIGNUP_USER_SUCCESS:
+      return {...state, ...INITIAL_STATE, showSignupCompleteModal: true }
     case TOGGLE_RUSH_MODAL:
-      return {...state, showRushModal: action.payload}
+      return {...state, showRushModal: action.payload }
     case LOGOUT_USER:
       return {...state, jwtToken: null }
     case EMAIL_CHANGED:

@@ -8,6 +8,7 @@ import Signup from '../Signup'
 import LoadingScreen from '../../components/Common/LoadingScreen'
 import LoginTextInput from '../../components/SignupTextInput'
 import RushClosedModal from '../../components/RushClosedModal'
+import SignupCompleteModal from '../../components/SignupCompleteModal'
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import styles from './styles'
 import { connect } from 'react-redux'
@@ -226,7 +227,11 @@ class Login extends Component {
     }
 
 	  renderRushClosedModal() {
-      return this.props.showRushModal ? <RushClosedModal rushOpen={this.state.isRushOpen}/> : <View/>
+      if (this.props.showRushModal) return <RushClosedModal/>
+    }
+
+    renderSignupCompleteModal() {
+      if (this.props.showSignupCompleteModal) return <SignupCompleteModal/>
     }
 
     async _isRushOpen() {
@@ -241,7 +246,6 @@ class Login extends Component {
                 <KeyboardAvoidingView behavior="position" style={s.keyboardContainer}>
                     <View style={s.container}>
                         {this.renderLogo()}
-                        <StatusBar barStyle="light-content" />
                         {this.renderEmailLabel()}
                         {this.renderEmailInput()}
                         {this.renderPasswordLabel()}
@@ -251,6 +255,7 @@ class Login extends Component {
                         {this.renderSignUpText()}
                         {this.renderErrorMessage()}
                         {this.renderRushClosedModal()}
+                        {this.renderSignupCompleteModal()}
                     </View>
                 </KeyboardAvoidingView>
             )
@@ -269,6 +274,7 @@ const mapStateToProps = state => {
     error: state.auth.error,
     loading: state.auth.loading,
     showRushModal: state.auth.showRushModal,
+    showSignupCompleteModal: state.auth.showSignupCompleteModal,
   }
 }
 

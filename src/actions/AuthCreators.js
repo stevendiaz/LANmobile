@@ -7,7 +7,8 @@ import {
   LOGIN_USER_LOADING,
   LOGIN_PERSISTED_USER,
   LOGOUT_USER,
-  TOGGLE_RUSH_MODAL, }from './types'
+  TOGGLE_RUSH_MODAL,
+  TOGGLE_SIGNUP_COMPLETE_MODAL, }from './types'
 import Api from '../api'
 import { AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
@@ -16,6 +17,13 @@ import { USER_JWT_TOKEN } from '../constants.js'
 export const toggleRushModal = (showModal) => {
   return {
     type: TOGGLE_RUSH_MODAL,
+    payload: showModal,
+  }
+}
+
+export const toggleSignupCompleteModal = (showModal) => {
+  return {
+    type: TOGGLE_SIGNUP_COMPLETE_MODAL,
     payload: showModal,
   }
 }

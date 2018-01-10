@@ -3,7 +3,7 @@ import {
   SIGNUP_FIELD_ERROR,
   SIGNUP_USER_LOADING,
   SIGNUP_USER_SUCCESS,
-  SIGNUP_USER_FAILURE } from '../actions/types'
+  SIGNUP_USER_FAILURE, } from '../actions/types'
 
 const INITIAL_STATE = {
   email: '',
@@ -26,7 +26,7 @@ export default (state = INITIAL_STATE, action) => {
     case SIGNUP_USER_LOADING:
       return {...state, loading: true}
     case SIGNUP_USER_SUCCESS:
-      return { ...state, ...INITIAL_STATE }
+      return { ...state, ...INITIAL_STATE, showSignupCompleteModal: true }
     case SIGNUP_FIELD_ERROR:
       return { ...state, error: action.payload}
     case SIGNUP_USER_FAILURE:

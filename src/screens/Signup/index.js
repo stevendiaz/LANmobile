@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { TouchableOpacity, Picker, DatePickerIOS, Image, View, Text, KeyboardAvoidingView, Dimensions, TextInput, StatusBar } from 'react-native'
 import { connect } from 'react-redux'
-import { setSignupFormValue, signupUser } from '../../actions'
+import { setSignupFormValue, signupUser, toggleSignupCompleteModal } from '../../actions'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import DateInput from '../../components/DateInput'
 import Dropdown from '../../components/Dropdown'
@@ -186,4 +186,8 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { setSignupFormValue, signupUser })(Signup)
+export default connect(mapStateToProps, {
+  setSignupFormValue,
+  signupUser,
+  toggleSignupCompleteModal,
+  })(Signup)
