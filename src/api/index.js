@@ -1,4 +1,4 @@
-import { BASE_API_URL, LOGIN_ROUTE, SIGNUP_ROUTE, REFRESH_JWT_ROUTE } from '../config'
+import { BASE_API_URL, LOGIN_ROUTE, SIGNUP_ROUTE, REFRESH_JWT_ROUTE, RUSH_STATUS_ROUTE } from '../config'
 import * as constants from '../constants'
 
 export default class Api {
@@ -47,6 +47,16 @@ export default class Api {
 
   _tokenJSON(jwtToken) {
     return JSON.stringify({'token': jwtToken})
+  }
+
+  async isRushOpen() {
+    const rushStatusUrl = BASE_API_URL + RUSH_STATUS_ROUTE
+    return fetch(rushStatusUrl, { method: 'GET' })
+            .then((response) => response.json())
+            .then((response) => response.rush)
+            .catch((error) => {
+              console.log(error)
+            })
   }
 
   refreshUserToken(jwtToken) {

@@ -6,7 +6,8 @@ import {
   LOGIN_USER_FAILURE,
   LOGIN_USER_LOADING,
   LOGIN_PERSISTED_USER,
-  LOGOUT_USER, } from '../actions/types'
+  LOGOUT_USER,
+  TOGGLE_RUSH_MODAL, } from '../actions/types'
 
 const INITIAL_STATE = {
   email: '',
@@ -15,10 +16,13 @@ const INITIAL_STATE = {
   user: null,
   jwtToken: null,
   loading: false,
+  showRushModal: false,
 }
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case TOGGLE_RUSH_MODAL:
+      return {...state, showRushModal: action.payload}
     case LOGOUT_USER:
       return {...state, jwtToken: null }
     case EMAIL_CHANGED:

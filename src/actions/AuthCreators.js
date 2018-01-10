@@ -6,11 +6,19 @@ import {
   LOGIN_FIELD_ERROR,
   LOGIN_USER_LOADING,
   LOGIN_PERSISTED_USER,
-  LOGOUT_USER, }from './types'
+  LOGOUT_USER,
+  TOGGLE_RUSH_MODAL, }from './types'
 import Api from '../api'
 import { AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { USER_JWT_TOKEN } from '../constants.js'
+
+export const toggleRushModal = (showModal) => {
+  return {
+    type: TOGGLE_RUSH_MODAL,
+    payload: showModal,
+  }
+}
 
 export const logoutUser = () => {
   return {

@@ -7,10 +7,11 @@ import Profile from '../Profile'
 import Signup from '../Signup'
 import LoadingScreen from '../../components/Common/LoadingScreen'
 import LoginTextInput from '../../components/SignupTextInput'
+import RushClosedModal from '../../components/RushClosedModal'
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import styles from './styles'
 import { connect } from 'react-redux'
-import { emailChanged, passwordChanged, loginUser, loginPersistedUser } from '../../actions'
+import { emailChanged, passwordChanged, loginUser, loginPersistedUser, toggleRushModal } from '../../actions'
 import Api from '../../api'
 
 const window = Dimensions.get('window')
@@ -140,7 +141,7 @@ class Login extends Component {
       return (
           <TouchableOpacity
               style={s.signUpView}
-              onPress={() => this.props.navigation.navigate('Signup')}>
+              onPress={() => this._isRushOpen()}>
                   <Text style={s.signUpText}>{signUpText}</Text>
           </TouchableOpacity>
       )
@@ -224,6 +225,15 @@ class Login extends Component {
       )
     }
 
+	  renderRushClosedModal() {
+      return this.props.showRushModal ? <RushClosedModal rushOpen={this.state.isRushOpen}/> : <View/>
+    }
+
+    async _isRushOpen() {
+      let isRushOpen = await new Api().isRushOpen()
+      isRushOpen ? this.props.navigation.navigate('Signup') : this.props.toggleRushModal(true)
+    }
+
     render() {
         let { loginStatus, error, showOnboardingModal } = this.state
         if (!this.state.loading) {
@@ -240,6 +250,7 @@ class Login extends Component {
                         {this.renderLoginButton()}
                         {this.renderSignUpText()}
                         {this.renderErrorMessage()}
+                        {this.renderRushClosedModal()}
                     </View>
                 </KeyboardAvoidingView>
             )
@@ -257,9 +268,14 @@ const mapStateToProps = state => {
     password: state.auth.password,
     error: state.auth.error,
     loading: state.auth.loading,
+    showRushModal: state.auth.showRushModal,
   }
 }
 
 export default connect(mapStateToProps, {
-    emailChanged, passwordChanged, loginUser, loginPersistedUser
+    emailChanged,
+    passwordChanged,
+    loginUser,
+    loginPersistedUser,
+    toggleRushModal,
   })(Login)
