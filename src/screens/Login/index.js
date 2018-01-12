@@ -42,14 +42,11 @@ class Login extends Component {
     if (this.props.error) {
       return (
         <View style={s.errorMessageContainer}>
-        <Image source={alert} style={s.errorMessageImg} />
-        <Text style={s.errorMessageText}>{this.props.error}</Text>
+          <Image source={alert} style={s.errorMessageImg} />
+          <Text style={s.errorMessageText}>{this.props.error}</Text>
         </View>
       )
     }
-    return (
-      <Text />
-    )
   }
 
   renderEmailLabel() {
@@ -68,12 +65,20 @@ class Login extends Component {
     }
   }
 
-  renderLoadingMessage() {
-    if (this.props.loading) {
-      return (
-        <Text style={s.loadingLabel}>Loading...</Text>
-      )
+  renderErrorContents() {
+    if (this.props.error) {
+      return this.renderErrorMessage()
+    } else if (this.props.loading) {
+      return ( <Text style={s.loadingLabel}>Loading...</Text> )
     }
+  }
+
+  renderError() {
+    return (
+      <View style={{flex:2, justifyContent: 'center', alignItems: 'center' }}>
+        {this.renderErrorContents()}
+      </View>
+    )
   }
 
   async _writePersistedJwtToken(jwtResponse) {
@@ -110,21 +115,26 @@ class Login extends Component {
   renderSignUpText() {
     const signUpText = "Don't have an account? Sign up here"
     return (
+      <View style={{flex:1}}>
       <TouchableOpacity
         style={s.signUpView}
         onPress={() => this._isRushOpen()}>
         <Text style={s.signUpText}>{signUpText}</Text>
       </TouchableOpacity>
+      </View>
     )
   }
 
   renderLoginButton() {
     return (
-      <TouchableOpacity
-    		style={s.loginBtnContainer}
-    		onPress={this.onLoginButtonPress.bind(this)} >
-    			<Text style={s.loginBtnText}> Login to TexasLAN </Text>
-			</TouchableOpacity>
+      <View style={{flex: 5, }}>
+        <TouchableOpacity
+    		  style={s.loginBtnContainer}
+    		  onPress={this.onLoginButtonPress.bind(this)} >
+    			  <Text style={s.loginBtnText}> Login to TexasLAN </Text>
+			  </TouchableOpacity>
+        {this.renderSignUpText()}
+      </View>
 		)
   }
 
@@ -209,6 +219,17 @@ class Login extends Component {
     isRushOpen ? this.props.navigation.navigate('Signup') : this.props.toggleRushModal(true)
   }
 
+  renderLoginInputs() {
+    return (
+      <View style={{flex:5, justifyContent: 'center'}}>
+        {this.renderEmailLabel()}
+        {this.renderEmailInput()}
+        {this.renderPasswordLabel()}
+        {this.renderPasswordField()}
+      </View>
+    )
+  }
+
   render() {
     let { loginStatus, error, showOnboardingModal } = this.state
     if (!this.state.loading) {
@@ -217,14 +238,9 @@ class Login extends Component {
           <View style={s.container}>
             <StatusBar barStyle="light-content" />
             {this.renderLogo()}
-            {this.renderEmailLabel()}
-            {this.renderEmailInput()}
-            {this.renderPasswordLabel()}
-            {this.renderPasswordField()}
-            {this.renderLoadingMessage()}
+            {this.renderLoginInputs()}
+            {this.renderError()}
             {this.renderLoginButton()}
-            {this.renderSignUpText()}
-            {this.renderErrorMessage()}
             {this.renderRushClosedModal()}
             {this.renderSignupCompleteModal()}
           </View>

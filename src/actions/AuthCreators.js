@@ -80,7 +80,7 @@ const loginUserRequestSuccess = async (dispatch, authResponse) => {
       type: LOGIN_FIELD_ERROR,
       payload: authResponse.non_field_errors[0]
     })
-  } else if (!authResponse.is_verified) {
+  } else if (!authResponse.user.is_verified) {
     dispatch({
       type: LOGIN_FIELD_ERROR,
       payload: EMAIL_NOT_VERIFIED,

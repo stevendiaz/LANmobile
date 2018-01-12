@@ -27,8 +27,7 @@ export default styles = (window) => {
       width: undefined,
     },
     logoContainer: {
-      flexGrow: 1,
-      flex: 1,
+      flex: 8,
       paddingTop: 50,
       paddingLeft: 25,
       paddingBottom: 25,
@@ -75,7 +74,7 @@ export default styles = (window) => {
       textAlign: 'center'
     },
     loginBtnContainer: {
-      marginTop: 40,
+      marginTop: 20,
       backgroundColor: '#2196f3',
       borderRadius: 50,
       height: 50,
@@ -94,6 +93,7 @@ export default styles = (window) => {
     },
     errorMessageText: {
       marginTop: 15,
+      marginLeft: 10,
       textAlign: 'center',
       fontSize: 15,
       color: 'white'
@@ -106,7 +106,7 @@ export default styles = (window) => {
       marginLeft: 20
     },
     errorMessageImg: {
-      marginTop: 14,
+      marginTop: 10,
       marginRight: 10,
       width: 20,
       height: 20
