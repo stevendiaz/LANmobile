@@ -38,213 +38,204 @@ class Login extends Component {
     this.props.loginUser(this.props.email, this.props.password)
   }
 
-    renderErrorMessage(error) {
-      if (this.props.error) {
-        return (
-          <View style={s.errorMessageContainer}>
-            <Image source={alert} style={s.errorMessageImg} />
-            <Text style={s.errorMessageText}>{this.props.error}</Text>
-          </View>
-        )
-      }
+  renderErrorMessage(error) {
+    if (this.props.error) {
       return (
-        <Text />
+        <View style={s.errorMessageContainer}>
+        <Image source={alert} style={s.errorMessageImg} />
+        <Text style={s.errorMessageText}>{this.props.error}</Text>
+        </View>
       )
     }
+    return (
+      <Text />
+    )
+  }
 
-    /**
-     * Method in charge of rendering the email label
-     */
-    renderEmailLabel() {
-        if (this.props.email) {
-            return (
-                <Text style={s.loginInputLabel}>Email</Text>
-            )
-        }
+  renderEmailLabel() {
+    if (this.props.email) {
+      return (
+        <Text style={s.loginInputLabel}>Email</Text>
+      )
     }
+  }
 
-    /**
-     * Method in charge of rendering the password label
-     */
-    renderPasswordLabel() {
-        if (this.props.password) {
-            return (
-                <Text style={s.loginInputLabel}>Password</Text>
-            )
-        }
+  renderPasswordLabel() {
+    if (this.props.password) {
+      return (
+        <Text style={s.loginInputLabel}>Password</Text>
+      )
     }
+  }
 
-    /**
-     * Method in charge of rendering the loading message
-     */
-    renderLoadingMessage() {
-        if (this.props.loading) {
-            return (
-                <Text style={s.loadingLabel}>Loading...</Text>
-            )
-        }
+  renderLoadingMessage() {
+    if (this.props.loading) {
+      return (
+        <Text style={s.loadingLabel}>Loading...</Text>
+      )
     }
+  }
 
-    async _writePersistedJwtToken(jwtResponse) {
-      if (jwtResponse.jwt_token) {
-        this.setState({ jwtToken: jwtResponse.jwt_token })
-        await AsyncStorage.setItem(c.USER_JWT_TOKEN, jwtResponse.jwt_token)
-      }
+  async _writePersistedJwtToken(jwtResponse) {
+    if (jwtResponse.jwt_token) {
+      this.setState({ jwtToken: jwtResponse.jwt_token })
+      await AsyncStorage.setItem(c.USER_JWT_TOKEN, jwtResponse.jwt_token)
     }
+  }
 
-    async _refreshAndLoginUser(jwtToken) {
-      jwtRefreshResponse = await new Api().refreshUserToken(jwtToken)
-      await this._writePersistedJwtToken(jwtRefreshResponse)
-      this.props.loginPersistedUser(jwtRefreshResponse)
-      this.props.navigation.navigate('drawerStack')
+  async _refreshAndLoginUser(jwtToken) {
+    jwtRefreshResponse = await new Api().refreshUserToken(jwtToken)
+    await this._writePersistedJwtToken(jwtRefreshResponse)
+    this.props.loginPersistedUser(jwtRefreshResponse)
+    this.props.navigation.navigate('drawerStack')
+    this.setState({ loading: false })
+  }
+
+  async componentWillMount() {
+    try {
+      let jwtToken = await AsyncStorage.getItem(c.USER_JWT_TOKEN)
+      jwtToken ? this._refreshAndLoginUser(jwtToken) : this.setState({ loading: false })
+    } catch (error) {
       this.setState({ loading: false })
     }
+  }
 
-    async componentWillMount() {
-      try {
-        let jwtToken = await AsyncStorage.getItem(c.USER_JWT_TOKEN)
-        jwtToken ? this._refreshAndLoginUser(jwtToken) : this.setState({ loading: false })
-      } catch (error) {
-        this.setState({ loading: false })
-      }
-    }
+  togglePasswordHide() {
+    this.setState({
+      hidePassword: this.state.hidePassword ? false : true,
+      passwordButton: this.state.hidePassword ? showPasswordButton : hidePasswordButton
+    })
+  }
 
-    togglePasswordHide() {
-        this.setState({
-            hidePassword: this.state.hidePassword ? false : true,
-            passwordButton: this.state.hidePassword ? showPasswordButton : hidePasswordButton
-        })
-    }
+  renderSignUpText() {
+    const signUpText = "Don't have an account? Sign up here"
+    return (
+      <TouchableOpacity
+        style={s.signUpView}
+        onPress={() => this._isRushOpen()}>
+        <Text style={s.signUpText}>{signUpText}</Text>
+      </TouchableOpacity>
+    )
+  }
 
-    renderSignUpText() {
-      const signUpText = "Don't have an account? Sign up here"
-      return (
+  renderLoginButton() {
+    return (
+      <TouchableOpacity
+    		style={s.loginBtnContainer}
+    		onPress={this.onLoginButtonPress.bind(this)} >
+    			<Text style={s.loginBtnText}> Login to TexasLAN </Text>
+			</TouchableOpacity>
+		)
+  }
+
+  onEmailChange(text) {
+    this.props.emailChanged(text)
+  }
+
+  onPasswordChange(text) {
+    this.props.passwordChanged(text)
+  }
+
+  onLoginButtonPress() {
+    const { email, password } = this.props
+    this.props.loginUser({ email, password })
+  }
+
+  renderEmailInput() {
+    return (
+      <LoginTextInput
+        style={s.loginInputText}
+        onChangeText={this.onEmailChange.bind(this)}
+        value={this.props.email}
+        placeholder="Email"
+        keyboardType="email-address"
+        secureTextEntry={false}
+        returnKeyType="next"
+        onSubmitEditing={() => this.passwordInput.focus()}
+        />
+    )
+  }
+
+  renderPasswordInput() {
+    return (
+      <LoginTextInput
+        style={s.loginInputText}
+        onChangeText={this.onPasswordChange.bind(this)}
+        value={this.props.password}
+        placeholder="Password"
+        keyboardType="default"
+        secureTextEntry={this.state.hidePassword}
+        returnKeyType="next"
+        onSubmitEditing={() => dismissKeyboard()}
+        />
+    )
+  }
+
+  renderPasswordField() {
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        <View style={{ flex: 10 }}>
+          {this.renderPasswordInput()}
+        </View>
+        <View style={{ flex: 1 }}>
           <TouchableOpacity
-              style={s.signUpView}
-              onPress={() => this._isRushOpen()}>
-                  <Text style={s.signUpText}>{signUpText}</Text>
+            style={s.hidePasswordButton}
+            onPress={() => this.togglePasswordHide()}>
+            <Image source={this.state.passwordButton} style={s.passwordButton} />
           </TouchableOpacity>
-      )
-    }
-
-    renderLoginButton() {
-      return (
-				<TouchableOpacity
-    				style={s.loginBtnContainer}
-    				onPress={this.onLoginButtonPress.bind(this)} >
-    						<Text style={s.loginBtnText}> Login to TexasLAN </Text>
-				</TouchableOpacity>
-			)
-    }
-
-    onEmailChange(text) {
-      this.props.emailChanged(text)
-    }
-
-    onPasswordChange(text) {
-      this.props.passwordChanged(text)
-    }
-
-    onLoginButtonPress() {
-      const { email, password } = this.props
-      this.props.loginUser({ email, password })
-    }
-
-    renderEmailInput() {
-      return (
-        <LoginTextInput
-          style={s.loginInputText}
-          onChangeText={this.onEmailChange.bind(this)}
-          value={this.props.email}
-          placeholder="Email"
-          keyboardType="email-address"
-          secureTextEntry={false}
-          returnKeyType="next"
-          onSubmitEditing={() => this.passwordInput.focus()}
-          />
-      )
-    }
-
-    renderPasswordInput() {
-      return (
-        <LoginTextInput
-          style={s.loginInputText}
-          onChangeText={this.onPasswordChange.bind(this)}
-          value={this.props.password}
-          placeholder="Password"
-          keyboardType="default"
-          secureTextEntry={this.state.hidePassword}
-          returnKeyType="next"
-          onSubmitEditing={() => dismissKeyboard()}
-          />
-      )
-    }
-
-    renderPasswordField() {
-      return (
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ flex: 10 }}>
-            {this.renderPasswordInput()}
-          </View>
-          <View style={{ flex: 1 }}>
-            <TouchableOpacity
-              style={s.hidePasswordButton}
-              onPress={() => this.togglePasswordHide()}>
-              <Image source={this.state.passwordButton} style={s.passwordButton} />
-            </TouchableOpacity>
-          </View>
         </View>
-      )
-    }
+      </View>
+    )
+  }
 
-    renderLogo() {
+  renderLogo() {
+    return (
+      <View style={s.logoContainer}>
+        <Image resizeMode="contain" style={s.lanCrest} source={lanCrest} />
+      </View>
+    )
+  }
+
+  renderRushClosedModal() {
+    if (this.props.showRushModal) return <RushClosedModal/>
+  }
+
+  renderSignupCompleteModal() {
+    if (this.props.showSignupCompleteModal) return <SignupCompleteModal/>
+  }
+
+  async _isRushOpen() {
+    let isRushOpen = await new Api().isRushOpen()
+    isRushOpen ? this.props.navigation.navigate('Signup') : this.props.toggleRushModal(true)
+  }
+
+  render() {
+    let { loginStatus, error, showOnboardingModal } = this.state
+    if (!this.state.loading) {
       return (
-        <View style={s.logoContainer}>
-          <Image resizeMode="contain" style={s.lanCrest} source={lanCrest} />
-        </View>
+        <KeyboardAvoidingView behavior="position" style={s.keyboardContainer}>
+          <View style={s.container}>
+            <StatusBar barStyle="light-content" />
+            {this.renderLogo()}
+            {this.renderEmailLabel()}
+            {this.renderEmailInput()}
+            {this.renderPasswordLabel()}
+            {this.renderPasswordField()}
+            {this.renderLoadingMessage()}
+            {this.renderLoginButton()}
+            {this.renderSignUpText()}
+            {this.renderErrorMessage()}
+            {this.renderRushClosedModal()}
+            {this.renderSignupCompleteModal()}
+          </View>
+        </KeyboardAvoidingView>
+      )
+    } else {
+      return (
+        <LoadingScreen/>
       )
     }
-
-	  renderRushClosedModal() {
-      if (this.props.showRushModal) return <RushClosedModal/>
-    }
-
-    renderSignupCompleteModal() {
-      if (this.props.showSignupCompleteModal) return <SignupCompleteModal/>
-    }
-
-    async _isRushOpen() {
-      let isRushOpen = await new Api().isRushOpen()
-      isRushOpen ? this.props.navigation.navigate('Signup') : this.props.toggleRushModal(true)
-    }
-
-    render() {
-        let { loginStatus, error, showOnboardingModal } = this.state
-        if (!this.state.loading) {
-            return (
-                <KeyboardAvoidingView behavior="position" style={s.keyboardContainer}>
-                    <View style={s.container}>
-                        <StatusBar barStyle="light-content" />
-                        {this.renderLogo()}
-                        {this.renderEmailLabel()}
-                        {this.renderEmailInput()}
-                        {this.renderPasswordLabel()}
-                        {this.renderPasswordField()}
-                        {this.renderLoadingMessage()}
-                        {this.renderLoginButton()}
-                        {this.renderSignUpText()}
-                        {this.renderErrorMessage()}
-                        {this.renderRushClosedModal()}
-                        {this.renderSignupCompleteModal()}
-                    </View>
-                </KeyboardAvoidingView>
-            )
-        } else {
-          return (
-            <LoadingScreen/>
-          )
-      }
-    }
+  }
 }
 
 const mapStateToProps = state => {
@@ -259,9 +250,9 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, {
-    emailChanged,
-    passwordChanged,
-    loginUser,
-    loginPersistedUser,
-    toggleRushModal,
-  })(Login)
+  emailChanged,
+  passwordChanged,
+  loginUser,
+  loginPersistedUser,
+  toggleRushModal,
+})(Login)
