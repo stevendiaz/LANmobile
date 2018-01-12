@@ -12,7 +12,7 @@ import {
 import Api from '../api'
 import { AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
-import { USER_JWT_TOKEN } from '../constants.js'
+import { USER_JWT_TOKEN, EMAIL_NOT_VERIFIED } from '../constants.js'
 
 export const toggleRushModal = (showModal) => {
   return {
@@ -75,7 +75,18 @@ const loginUserFailure = (dispatch) => {
 }
 
 const loginUserRequestSuccess = async (dispatch, authResponse) => {
-  if (!authResponse.non_field_errors) {
+  if (authResponse.non_field_errors) {
+    dispatch({
+      type: LOGIN_FIELD_ERROR,
+      payload: authResponse.non_field_errors[0]
+    })
+  } else if (!authResponse.is_verified) {
+    dispatch({
+      type: LOGIN_FIELD_ERROR,
+      payload: EMAIL_NOT_VERIFIED,
+    })
+  }
+  else {
     await AsyncStorage.setItem(USER_JWT_TOKEN, authResponse.jwt_token)
     dispatch({
       type: LOGIN_USER_SUCCESS,
@@ -84,12 +95,6 @@ const loginUserRequestSuccess = async (dispatch, authResponse) => {
     dispatch({
       type: NavigationActions.NAVIGATE,
       routeName: 'drawerStack',
-    })
-  }
-  else {
-    dispatch({
-      type: LOGIN_FIELD_ERROR,
-      payload: authResponse.non_field_errors[0]
     })
   }
 }

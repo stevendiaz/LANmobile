@@ -17,6 +17,7 @@ export const MAX_GRADUATION_DATE = '2026-05-15'
 export const MIN_GRADUATION_DATE = '2016-05-15'
 export const MIN_PASSWORD_LENGTH = 6
 export const USERNAME_ERROR_MESSAGE = 'A user with that username already exists.'
+export const EMAIL_NOT_VERIFIED = 'Email is not verified. Please check your email for confirmation.'
 export const colors = {
   primary: '#145991'
 }

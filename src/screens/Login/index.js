@@ -14,7 +14,6 @@ import styles from './styles'
 import { connect } from 'react-redux'
 import { emailChanged, passwordChanged, loginUser, loginPersistedUser, toggleRushModal } from '../../actions'
 import Api from '../../api'
-
 const window = Dimensions.get('window')
 const s = styles(window)
 const alert = require('../../../resources/images/alert.png')
@@ -22,14 +21,6 @@ const lanCrest = require('../../../resources/images/lan-crest-white.png')
 const showPasswordButton = require('../../../resources/images/password-show.png')
 const hidePasswordButton = require('../../../resources/images/password-hide.png')
 
-/**
- * Login component, responsible to handle the authentication of user. It 
- * will ask user for email and password. In case combination is valid, it 
- * will persist authentication response on AsynsStorage and 
- * redirect user to Notifications List. 
- * If given email and password are invalid, it'll display an error message.
- * 
- */
 class Login extends Component {
   constructor(props) {
     super(props)
@@ -43,22 +34,10 @@ class Login extends Component {
     this.togglePasswordHide = this.togglePasswordHide.bind(this);
   }
 
-    /**
-     * This method is in charge of attempting to authenticate user with the
-     * given credentials and persist the login data in the app in case of
-     * success. If authentication attempt fails, it will properly propagate
-     * the error.
-     */
-    async login() {
-      this.props.loginUser(this.props.email, this.props.password)
-    }
+  async login() {
+    this.props.loginUser(this.props.email, this.props.password)
+  }
 
-    /**
-     * Method in charge of rendering an error message to be displayed in case
-     * the authentication attempt was unsuccessful.
-     * 
-     * @param {*} error the error propagated from the login attempt
-     */
     renderErrorMessage(error) {
       if (this.props.error) {
         return (
@@ -245,6 +224,7 @@ class Login extends Component {
             return (
                 <KeyboardAvoidingView behavior="position" style={s.keyboardContainer}>
                     <View style={s.container}>
+                        <StatusBar barStyle="light-content" />
                         {this.renderLogo()}
                         {this.renderEmailLabel()}
                         {this.renderEmailInput()}
