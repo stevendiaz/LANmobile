@@ -3,12 +3,13 @@ import { StackNavigator, DrawerNavigator } from 'react-navigation'
 import Login from '../screens/Login'
 import Signup from '../screens/Signup'
 import Profile from '../screens/Profile'
+import EventList from '../screens/EventList'
 import MenuBar from '../components/MenuBar'
 import NavigationDrawer from '../components/NavigationDrawer'
 import { colors } from '../constants'
 
 const DrawerStack = DrawerNavigator({
-  screen1: { screen: Profile },
+  screen1: { screen: EventList },
 }, {
   gesturesEnabled: false,
   contentComponent: NavigationDrawer,

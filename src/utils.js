@@ -25,6 +25,11 @@ export function getFormattedMMDDYYYY(date) {
     return d.format('L')
 }
 
+export function getFormattedMMDD(date) {
+  let d = new moment(date)
+  return d.format('M[/]D')
+}
+
 /**
  * @param date string date with format MM/DD/YY HH:MM:SS
  * @return TRUE if provided date is today, otherwise FALSE

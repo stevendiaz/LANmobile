@@ -1,0 +1,1 @@
+export const MESSAGES_MSG = 'Messages'
