@@ -4,11 +4,15 @@ import { NavigationActions } from 'react-navigation'
 import { connect }  from 'react-redux'
 import { logoutUser } from '../../actions'
 import * as c from '../../constants'
+import * as permissions from '../../permissions'
 import styles from './styles'
 
 class NavigationDrawer extends Component {
+  constructor(props) {
+    super(props)
+  }
 
-  async logout() {
+  async _logout() {
     await this._clearStorage()
 		const actionToDispatch = NavigationActions.reset({
 			index: 0,
@@ -23,28 +27,53 @@ class NavigationDrawer extends Component {
     await AsyncStorage.removeItem(c.USER_JWT_TOKEN)
   }
 
+  renderCreateEvent(screen, screenName) {
+    if (permissions.canCreateEvent(this.props.user)) {
+      return (
+        <Text
+          onPress={() => this.props.navigation.navigate('createEvent')}
+          style={styles.drawerItem}>
+            Create Event
+        </Text>
+      )
+    }
+  }
+
+  renderEventList() {
+    return (
+      <Text
+        onPress={() => this.props.navigation.navigate('eventList')}
+        style={styles.drawerItem}>
+          Events
+      </Text>
+    )
+  }
+
+  renderLogout() {
+    return (
+      <Text
+        onPress={() => this._logout()}
+        style={styles.logoutItem}>
+          Log Out
+      </Text>
+    )
+  }
+
   render() {
-    const { navigation } = this.props
     return (
       <View style={styles.container}>
-        <Text
-          onPress={() => navigation.navigate('screen1')}
-          style={styles.drawerItem}>
-          Events
-        </Text>
-        <Text
-          onPress={() => navigation.navigate('screen2')}
-          style={styles.drawerItem}>
-          Profile
-        </Text>
-        <Text
-          onPress={() => this.logout()}
-          style={styles.logoutItem}>
-          Log Out
-				</Text>
+        { this.renderEventList() }
+        { this.renderCreateEvent() }
+        { this.renderLogout() }
       </View>
     )
   }
 }
 
-export default connect(null, { logoutUser })(NavigationDrawer)
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user,
+  }
+}
+
+export default connect(mapStateToProps, { logoutUser })(NavigationDrawer)
