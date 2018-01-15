@@ -13,7 +13,7 @@ export default styles = (window) => {
       borderBottomWidth: 1,
       borderBottomColor: '#444444',
       marginBottom: 10,
-      color: 'white'
+      color: '#444444'
     },
     createEventContainer: {
       marginTop: 40,

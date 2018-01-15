@@ -15,13 +15,14 @@ export default class DateInput extends DatePicker {
     let { date, placeholder, onDateChange, dark } = this.props
     let style = dark ? s.inputDateDark : s.inputDateLight
     let text = dark ? s.dateTextDark : s.dateTextLight
+    let format = this.props.format ? this.props.format : "YYYY-MM-DD"
     return (
       <DatePicker
         date={date}
         placeholder={placeholder}
         onDateChange={onDateChange}
         mode="datetime"
-        format="YYYY-MM-DD"
+        format={format}
         minDate={MIN_GRADUATION_DATE}
         maxDate={MAX_GRADUATION_DATE}
         confirmBtnText="Confirm"
