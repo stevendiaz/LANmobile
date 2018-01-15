@@ -6,7 +6,7 @@ import { LOG } from '../../utils'
 import Profile from '../Profile'
 import Signup from '../Signup'
 import LoadingScreen from '../../components/Common/LoadingScreen'
-import LoginTextInput from '../../components/SignupTextInput'
+import FormTextInput from '../../components/FormTextInput'
 import RushClosedModal from '../../components/RushClosedModal'
 import SignupCompleteModal from '../../components/SignupCompleteModal'
 import dismissKeyboard from 'react-native-dismiss-keyboard';
@@ -153,7 +153,7 @@ class Login extends Component {
 
   renderEmailInput() {
     return (
-      <LoginTextInput
+      <FormTextInput
         style={s.loginInputText}
         onChangeText={this.onEmailChange.bind(this)}
         value={this.props.email}
@@ -162,13 +162,15 @@ class Login extends Component {
         secureTextEntry={false}
         returnKeyType="next"
         onSubmitEditing={() => this.passwordInput.focus()}
+        placeholderTextColor={'white'}
+        selectionColor={'white'}
         />
     )
   }
 
   renderPasswordInput() {
     return (
-      <LoginTextInput
+      <FormTextInput
         style={s.loginInputText}
         onChangeText={this.onPasswordChange.bind(this)}
         value={this.props.password}
@@ -177,6 +179,8 @@ class Login extends Component {
         secureTextEntry={this.state.hidePassword}
         returnKeyType="next"
         onSubmitEditing={() => dismissKeyboard()}
+        placeholderTextColor={'white'}
+        selectionColor={'white'}
         />
     )
   }

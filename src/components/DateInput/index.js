@@ -12,13 +12,15 @@ export default class DateInput extends DatePicker {
   }
 
   render() {
-    let { date, placeholder, onDateChange } = this.props
+    let { date, placeholder, onDateChange, dark } = this.props
+    let style = dark ? s.inputDateDark : s.inputDateLight
+    let text = dark ? s.dateTextDark : s.dateTextLight
     return (
       <DatePicker
         date={date}
         placeholder={placeholder}
         onDateChange={onDateChange}
-        mode="date"
+        mode="datetime"
         format="YYYY-MM-DD"
         minDate={MIN_GRADUATION_DATE}
         maxDate={MAX_GRADUATION_DATE}
@@ -26,10 +28,10 @@ export default class DateInput extends DatePicker {
         cancelBtnText="Cancel"
 				customStyles={{
           dateInput: s.dateBox,
-          dateText: s.dateText,
-          placeholderText: s.dateText
+          dateText: text,
+          placeholderText: text,
         }}
-        style={s.inputDate}
+        style={style}
         />
     )
   }

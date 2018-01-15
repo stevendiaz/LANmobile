@@ -5,7 +5,7 @@ import { setSignupFormValue, signupUser, toggleSignupCompleteModal } from '../..
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import DateInput from '../../components/DateInput'
 import Dropdown from '../../components/Dropdown'
-import SignupTextInput from '../../components/SignupTextInput'
+import FormTextInput from '../../components/FormTextInput'
 import RushClosedModal from '../../components/RushClosedModal'
 import { NavigationActions } from 'react-navigation'
 import Api from '../../api'
@@ -115,7 +115,7 @@ class Signup extends Component {
 
   renderTextInput(inputLabel, style, nextInput=null, hideText=false, returnKeyType="next") {
     return (
-      <SignupTextInput
+      <FormTextInput
         ref={inputLabel.key}
         style={style}
         onChangeText={(input) => this.onFieldChange(inputLabel.key, input) }
@@ -125,6 +125,8 @@ class Signup extends Component {
         returnKeyType={returnKeyType}
         onSubmitEditing={(event) => this.onSubmitEditing(inputLabel, nextInput)}
         secureTextEntry={hideText}
+        placeholderTextColor={'white'}
+        selectionColor={'white'}
         />
     )
   }
