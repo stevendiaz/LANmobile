@@ -2,6 +2,17 @@ import { StyleSheet } from 'react-native'
 
 export default styles = (window) => {
   return StyleSheet.create({
+    loadingContainer: {
+      height: 40,
+      marginTop: 10,
+      width: undefined,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    loadingLabel: {
+      color: '#444444',
+      textAlign: 'center'
+    },
     container: {
       padding: 20,
       paddingBottom: 20,

@@ -1,4 +1,9 @@
-import { EVENT_FIELD_SET, EVENT_DATE_SET, EVENT_CREATE_LOADING, EVENT_CREATE_SUCCESS } from './types'
+import {
+  EVENT_FIELD_SET,
+  EVENT_DATE_SET,
+  EVENT_CREATE_LOADING,
+  EVENT_CREATE_SUCCESS,
+  EVENT_LIST_FETCH_SUCCESS, } from './types'
 import Api from '../api'
 import { NavigationActions } from 'react-navigation'
 
@@ -26,12 +31,33 @@ export const setDateValue = (date) => {
   }
 }
 
+export const fetchEvents = (jwtToken) => {
+  return (dispatch) => {
+    api = new Api()
+    api.fetchEvents(jwtToken)
+      .then(response => fetchEventsRequestSuccess(dispatch, response))
+      .catch((error) => {
+        console.log('fetch events failure: ' + error)
+      })
+  }
+}
+
+const fetchEventsRequestSuccess = (dispatch, response) => {
+  dispatch({
+    type: EVENT_LIST_FETCH_SUCCESS,
+    payload: response,
+  })
+}
+
 const createEventRequest = (dispatch, form, userJwt) => {
   api = new Api()
   api.createEvent(form, userJwt)
     .then(response => createEventRequestSuccess(dispatch, response))
     .catch((error) => {
-      console.log(error)
+      console.log('request failure: ' + error)
+      dispatch({
+        type: EVENT_CREATE_FAILURE
+      })
     })
 }
 

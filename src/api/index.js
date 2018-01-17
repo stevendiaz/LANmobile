@@ -111,5 +111,17 @@ export default class Api {
     })
   }
 
+  fetchEvents(jwtToken) {
+    const eventUrl = BASE_API_URL + EVENT_ROUTE
+    return fetch(eventUrl, {
+      method: 'GET',
+      headers: this._authHeaders(jwtToken),
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      console.log('fetchevent error: ' + error)
+    })
+  }
+
 }
 
