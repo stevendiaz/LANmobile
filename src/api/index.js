@@ -1,4 +1,10 @@
-import { BASE_API_URL, LOGIN_ROUTE, SIGNUP_ROUTE, REFRESH_JWT_ROUTE, RUSH_STATUS_ROUTE } from '../config'
+import {
+  BASE_API_URL,
+  LOGIN_ROUTE,
+  SIGNUP_ROUTE,
+  REFRESH_JWT_ROUTE,
+  RUSH_STATUS_ROUTE,
+  EVENT_ROUTE, } from '../config'
 import * as constants from '../constants'
 
 export default class Api {
@@ -9,6 +15,17 @@ export default class Api {
       'Pragma': 'no-cache',
       'Expires': '0',
       'Content-Type': 'application/json',
+    }
+  }
+
+  _authHeaders(userJwt) {
+    console.log('user jwt: ' + userJwt)
+    return {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + userJwt,
     }
   }
 
@@ -71,5 +88,28 @@ export default class Api {
       console.log('refreshusertoken error: ' + error)
     })
   }
+
+  _createEventJSON(form) {
+    result = {...form}
+    result.start_time = form.datetime.format()
+    result.end_time = form.datetime.add(1, 'hours').format()
+    result.description = "No description provided."
+    console.log('in api: ' + JSON.stringify(result))
+    return JSON.stringify(result)
+  }
+
+  createEvent(form, userJwt) {
+    const eventUrl = BASE_API_URL + EVENT_ROUTE
+    return fetch(eventUrl, {
+      method: 'POST',
+      headers: this._authHeaders(userJwt),
+      body: this._createEventJSON(form),
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      console.log('createeventform error: ' + error)
+    })
+  }
+
 }
 

@@ -3,8 +3,9 @@ import { View, TouchableOpacity, Text,  Dimensions } from 'react-native'
 import DateInput from '../../components/DateInput'
 import FormTextInput from '../../components/FormTextInput'
 import { connect } from 'react-redux'
-import { setEventFormValue } from '../../actions'
+import { setEventFormValue, setDateValue, createEvent } from '../../actions'
 import styles from './styles'
+import moment from 'moment'
 const window = Dimensions.get('window')
 const s = styles(window)
 
@@ -18,7 +19,16 @@ class EventCreate extends Component {
     this.props.setEventFormValue({key, value})
   }
 
+  _onDateChange(date) {
+    this.props.setDateValue(date)
+  }
+
+  _createEvent() {
+    this.props.createEvent(this.props, this.props.jwtToken)
+  }
+
   render() {
+    let mom = moment("2018-01-19T20:00")
     return (
       <View style={s.container}>
         <FormTextInput
@@ -46,13 +56,14 @@ class EventCreate extends Component {
           selectionColor='#444444'
         />
         <DateInput
+          format={'MMMM Do [at] h:mm[]a'}
           placeholder='Event Date'
           dark={true}
-          onDateChange={(date) => this._onFieldChange('datetime', date)}
-          date={this.props.datetime}/>
+          onDateChange={(date) => this._onDateChange(date)}
+          date={this.props.datetime.toDate()}/>
         <TouchableOpacity
           style={s.createEventContainer}
-          onPress={ () => console.log('signup')}>
+          onPress={ () => this._createEvent()}>
             <Text style={s.createEventText}> Create Event </Text>
         </TouchableOpacity>
       </View>
@@ -65,9 +76,12 @@ const mapStateToProps = state => {
     location: state.events.location,
     title: state.events.title,
     datetime: state.events.datetime,
+    jwtToken: state.auth.jwtToken,
   }
 }
 
 export default connect(mapStateToProps, {
   setEventFormValue,
+  createEvent,
+  setDateValue,
 })(EventCreate)
