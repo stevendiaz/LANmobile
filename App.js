@@ -1,10 +1,11 @@
 import React from 'react'
-import RootNavigation from './src/navigation/ReduxNavigation'
+import { RootNavigation, navigationMiddleware } from './src/navigation/ReduxNavigation'
 import Expo from 'expo'
 import ReduxThunk from 'redux-thunk'
 import { StackNavigator } from 'react-navigation'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
+import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers'
 import reducers from './src/reducers'
 
 /**
@@ -31,7 +32,7 @@ export default class App extends React.Component {
       return <Expo.AppLoading />
     }
 
-    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk))
+    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk, navigationMiddleware))
     return (
       <Provider store={store}>
         <RootNavigation />
