@@ -71,6 +71,7 @@ class EventCreate extends Component {
     return (
       <View>
         <DateInput
+          mode='datetime'
           format={DATETIME_FORMAT}
           placeholder='Event Date'
           dark={true}

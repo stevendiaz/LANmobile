@@ -16,12 +16,13 @@ export default class DateInput extends DatePicker {
     let style = dark ? s.inputDateDark : s.inputDateLight
     let text = dark ? s.dateTextDark : s.dateTextLight
     let format = this.props.format ? this.props.format : "YYYY-MM-DD"
+    let mode = this.props.mode ? this.props.mode : "date"
     return (
       <DatePicker
         date={date}
         placeholder={placeholder}
         onDateChange={onDateChange}
-        mode="datetime"
+        mode={mode}
         format={format}
         minDate={MIN_GRADUATION_DATE}
         maxDate={MAX_GRADUATION_DATE}

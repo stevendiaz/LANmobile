@@ -92,9 +92,8 @@ export default class Api {
   _createEventJSON(form) {
     result = {...form}
     result.start_time = form.datetime.format()
-    result.end_time = form.datetime.add(1, 'hours').format()
+    result.end_time = form.datetime.format()
     result.description = "No description provided."
-    console.log('in api: ' + JSON.stringify(result))
     return JSON.stringify(result)
   }
 
@@ -105,7 +104,6 @@ export default class Api {
       headers: this._authHeaders(userJwt),
       body: this._createEventJSON(form),
     })
-    .then((response) => response.json())
     .catch((error) => {
       console.log('createeventform error: ' + error)
     })

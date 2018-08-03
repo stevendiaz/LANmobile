@@ -19,7 +19,7 @@ export default styles = (window) => {
     signUpView: {
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 20,
+      padding: 10,
     },
     lanCrest: {
       flex: 1,

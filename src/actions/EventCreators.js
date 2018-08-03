@@ -3,7 +3,8 @@ import {
   EVENT_DATE_SET,
   EVENT_CREATE_LOADING,
   EVENT_CREATE_SUCCESS,
-  EVENT_LIST_FETCH_SUCCESS, } from './types'
+  EVENT_LIST_FETCH_SUCCESS,
+  EVENT_CREATE_FAILURE, } from './types'
 import Api from '../api'
 import { NavigationActions } from 'react-navigation'
 
@@ -52,17 +53,29 @@ const fetchEventsRequestSuccess = (dispatch, response) => {
 const createEventRequest = (dispatch, form, userJwt) => {
   api = new Api()
   api.createEvent(form, userJwt)
-    .then(response => createEventRequestSuccess(dispatch, response))
+    .then(response => handleEventResponse(dispatch, response))
     .catch((error) => {
-      console.log('request failure: ' + error)
-      dispatch({
-        type: EVENT_CREATE_FAILURE
-      })
+      createEventRequestFailure(dispatch, error)
     })
 }
 
+const handleEventResponse = async(dispatch, response) => {
+  let body = await response.json()
+  if (response.ok) {
+    createEventRequestSuccess(dispatch, body)
+  } else {
+    createEventRequestFailure(dispatch, body["non_field_errors"].pop())
+  }
+}
+
+const createEventRequestFailure = (dispatch, error) => {
+  dispatch({
+    type: EVENT_CREATE_FAILURE,
+    payload: error,
+  })
+}
+
 const createEventRequestSuccess = (dispatch, response) =>  {
-  console.log('request success: ' + JSON.stringify(response))
   dispatch({
     type: EVENT_CREATE_SUCCESS,
     payload: response,
