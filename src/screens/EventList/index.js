@@ -22,7 +22,7 @@ class EventList extends Component {
         <FlatList
           style={s.eventListContainer}
           data={this.props.eventList}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => <EventItem
             location={item.location}
             title={item.title}
