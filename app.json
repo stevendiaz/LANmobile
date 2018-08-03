@@ -4,7 +4,7 @@
     "icon": "./resources/images/app_icons/android/ic_launcher/web_hi_res_512.png",
     "version": "0.0.1",
     "slug": "schoolinks",
-    "sdkVersion": "21.0.0",
+    "sdkVersion": "27.0.0",
     "orientation": "portrait",
     "primaryColor": "#6B9925",
     "ios": {
